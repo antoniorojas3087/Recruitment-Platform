@@ -12,19 +12,17 @@
       min-height: 100vh; color: #e2e8f0; padding: 24px;
     }
     .container { max-width: 1200px; margin: 0 auto; }
-    .header { margin-bottom: 24px; }
+    .header { margin-bottom: 24px; display:flex; justify-content:space-between; align-items:center; }
     .logo {
       font-size: 26px; font-weight: 700;
       background: linear-gradient(to right, #60a5fa, #a855f7);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .tagline { font-size: 13px; color: #64748b; }
+    .sync { font-size: 12px; color: #64748b; }
+    .sync.ok { color: #86efac; }
     .nav { display: flex; gap: 4px; border-bottom: 1px solid #334155; margin-bottom: 28px; flex-wrap: wrap; }
-    .nav-btn {
-      padding: 10px 18px; font-size: 14px; font-weight: 500; border: none;
-      background: transparent; cursor: pointer; color: #94a3b8;
-      border-bottom: 2px solid transparent; transition: all 0.2s;
-    }
+    .nav-btn { padding: 10px 18px; font-size: 14px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: #94a3b8; border-bottom: 2px solid transparent; transition: all 0.2s; }
     .nav-btn.active { color: white; border-bottom-color: #3b82f6; }
     .nav-btn:hover { color: white; }
     .tab { display: none; }
@@ -43,10 +41,7 @@
     .badge.green { background: rgba(34, 197, 94, 0.2); color: #86efac; }
     .badge.yellow { background: rgba(234, 179, 8, 0.2); color: #fde047; }
     .input-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-    input, select, textarea {
-      flex: 1; min-width: 120px; padding: 10px 14px; border: 1px solid #475569;
-      border-radius: 8px; font-size: 14px; color: white; background: #1e293b; font-family: inherit;
-    }
+    input, select, textarea { flex: 1; min-width: 120px; padding: 10px 14px; border: 1px solid #475569; border-radius: 8px; font-size: 14px; color: white; background: #1e293b; font-family: inherit; }
     input::placeholder { color: #64748b; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; }
     .btn { padding: 10px 18px; border: 1px solid #475569; border-radius: 8px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: white; transition: all 0.2s; white-space: nowrap; }
@@ -72,8 +67,11 @@
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">Recruitment Portal</div>
-      <div class="tagline">Senior executive placements · Australia-wide</div>
+      <div>
+        <div class="logo">Recruitment Portal</div>
+        <div class="tagline">Senior executive placements · Australia-wide</div>
+      </div>
+      <div class="sync" id="sync-status">Connecting...</div>
     </div>
 
     <div class="nav">
@@ -91,7 +89,7 @@
         <div class="stat-card"><div class="stat-label">In Pipeline</div><div class="stat-value" id="d-pipeline">0</div></div>
         <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="d-placed">0</div></div>
       </div>
-      <div class="alert">Platform live. Add vendors you're selling to, source candidates on LinkedIn, then run agents to match and draft outreach.</div>
+      <div class="alert">Data synced to your database. Access from any device. Add vendors, source candidates, run agents.</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
         <button class="btn btn-primary" onclick="switchTab('vendors', document.querySelectorAll('.nav-btn')[1])">+ Add Vendor</button>
         <button class="btn btn-primary" onclick="switchTab('candidates', document.querySelectorAll('.nav-btn')[2])">+ Add Candidate</button>
@@ -137,7 +135,7 @@
 
     <div id="agents" class="tab">
       <div class="section-title">AI Agents</div>
-      <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Agents run live on Claude. They work on your data plus live web research.</p>
+      <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Agents run live on Claude, working on your database plus live web research.</p>
       <div class="agent-grid">
         <button class="agent-btn" onclick="runAgent('vendor_research')"><div class="agent-title">Vendor Research</div><div class="agent-desc">Find Australia vendors hiring senior sales/BD</div></button>
         <button class="agent-btn" onclick="runAgent('candidate_sourcing')"><div class="agent-title">Candidate Sourcing</div><div class="agent-desc">LinkedIn sourcing strategy + Boolean strings</div></button>
@@ -150,15 +148,36 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    let vendors = JSON.parse(localStorage.getItem('rp_vendors') || '[]');
-    let candidates = JSON.parse(localStorage.getItem('rp_candidates') || '[]');
-    let pipeline = JSON.parse(localStorage.getItem('rp_pipeline') || '[]');
+    const SUPABASE_URL = 'https://efintqfbpaquoojgudfg.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmaW50cWZicGFxdW9vamd1ZGZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODQ2MDEsImV4cCI6MjA5NjQ2MDYwMX0.ruSjJoIvra73-Tvq5c3BALjNa4sF1i3RArodxYoagZU';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function save() {
-      localStorage.setItem('rp_vendors', JSON.stringify(vendors));
-      localStorage.setItem('rp_candidates', JSON.stringify(candidates));
-      localStorage.setItem('rp_pipeline', JSON.stringify(pipeline));
+    let vendors = [], candidates = [], pipeline = [];
+
+    function setSync(text, ok) {
+      const el = document.getElementById('sync-status');
+      el.textContent = text;
+      el.className = 'sync' + (ok ? ' ok' : '');
+    }
+
+    async function loadAll() {
+      setSync('Syncing...', false);
+      try {
+        const [v, c, p] = await Promise.all([
+          sb.from('vendors').select('*').order('created_at', { ascending: false }),
+          sb.from('candidates').select('*').order('created_at', { ascending: false }),
+          sb.from('pipeline').select('*').order('created_at', { ascending: false }),
+        ]);
+        vendors = v.data || [];
+        candidates = c.data || [];
+        pipeline = p.data || [];
+        setSync('Synced ✓', true);
+        render();
+      } catch (e) {
+        setSync('Sync error', false);
+      }
     }
 
     function switchTab(tab, btn) {
@@ -169,40 +188,47 @@
       render();
     }
 
-    function addVendor() {
+    async function addVendor() {
       const name = document.getElementById('v-name').value.trim();
       if (!name) return;
-      vendors.push({ id: Date.now(), name,
+      const row = { id: Date.now(), name,
         industry: document.getElementById('v-industry').value.trim(),
         location: document.getElementById('v-location').value.trim(),
-        role: document.getElementById('v-role').value.trim() });
-      save();
+        role: document.getElementById('v-role').value.trim() };
+      await sb.from('vendors').insert(row);
       ['v-name','v-industry','v-location','v-role'].forEach(id => document.getElementById(id).value = '');
-      render();
+      loadAll();
     }
 
-    function addCandidate() {
+    async function addCandidate() {
       const name = document.getElementById('c-name').value.trim();
       if (!name) return;
-      const cand = { id: Date.now(), name,
+      const id = Date.now();
+      const cand = { id, name,
         role: document.getElementById('c-role').value.trim(),
         years: document.getElementById('c-years').value.trim(),
         location: document.getElementById('c-location').value.trim(),
         salary: document.getElementById('c-salary').value.trim(),
         stage: 'sourced' };
-      candidates.push(cand);
-      pipeline.push({ id: cand.id, name: cand.name, salary: cand.salary, stage: 'sourced' });
-      save();
+      await sb.from('candidates').insert(cand);
+      await sb.from('pipeline').insert({ id, name: cand.name, salary: cand.salary, stage: 'sourced' });
       ['c-name','c-role','c-years','c-location','c-salary'].forEach(id => document.getElementById(id).value = '');
-      render();
+      loadAll();
     }
 
-    function deleteVendor(id) { vendors = vendors.filter(v => v.id !== id); save(); render(); }
-    function deleteCandidate(id) { candidates = candidates.filter(c => c.id !== id); pipeline = pipeline.filter(p => p.id !== id); save(); render(); }
-    function updateStage(id, stage) {
-      const p = pipeline.find(p => p.id === id); if (p) p.stage = stage;
-      const c = candidates.find(c => c.id === id); if (c) c.stage = stage;
-      save(); render();
+    async function deleteVendor(id) {
+      await sb.from('vendors').delete().eq('id', id);
+      loadAll();
+    }
+    async function deleteCandidate(id) {
+      await sb.from('candidates').delete().eq('id', id);
+      await sb.from('pipeline').delete().eq('id', id);
+      loadAll();
+    }
+    async function updateStage(id, stage) {
+      await sb.from('pipeline').update({ stage }).eq('id', id);
+      await sb.from('candidates').update({ stage }).eq('id', id);
+      loadAll();
     }
 
     async function runAgent(type) {
@@ -259,14 +285,15 @@
       document.getElementById('pipeline-list').innerHTML = pipeline.length === 0
         ? '<div class="empty">No pipeline activity. Add candidates to start tracking.</div>'
         : pipeline.map(p => {
-          const fee = p.stage === 'placed' && p.salary ? Math.round(p.salary * 1000 * 0.2) : null;
-          const potential = p.salary ? Math.round(p.salary * 1000 * 0.2) : null;
+          const sal = parseFloat(p.salary);
+          const fee = (p.stage === 'placed' && sal) ? Math.round(sal * 1000 * 0.2) : null;
+          const potential = sal ? Math.round(sal * 1000 * 0.2) : null;
           const badgeClass = p.stage === 'placed' ? 'green' : (p.stage === 'interview' || p.stage === 'offer') ? 'yellow' : '';
           return `<div class="card"><div class="card-row"><div><div class="card-title">${p.name}</div><div class="card-meta">${fee ? 'Fee earned: $' + fee.toLocaleString() : (potential ? 'Potential fee: $' + potential.toLocaleString() : 'No salary set')}</div></div><div style="display:flex; gap:8px; align-items:center;"><span class="badge ${badgeClass}">${p.stage}</span><select class="stage-select" onchange="updateStage(${p.id}, this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select></div></div></div>`;
         }).join('');
     }
 
-    render();
+    loadAll();
   </script>
 </body>
 </html>
