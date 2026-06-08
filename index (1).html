@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitment Portal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+      min-height: 100vh; color: #e2e8f0; padding: 24px;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header { margin-bottom: 24px; }
+    .logo {
+      font-size: 26px; font-weight: 700;
+      background: linear-gradient(to right, #60a5fa, #a855f7);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .tagline { font-size: 13px; color: #64748b; }
+    .nav { display: flex; gap: 4px; border-bottom: 1px solid #334155; margin-bottom: 28px; flex-wrap: wrap; }
+    .nav-btn {
+      padding: 10px 18px; font-size: 14px; font-weight: 500; border: none;
+      background: transparent; cursor: pointer; color: #94a3b8;
+      border-bottom: 2px solid transparent; transition: all 0.2s;
+    }
+    .nav-btn.active { color: white; border-bottom-color: #3b82f6; }
+    .nav-btn:hover { color: white; }
+    .tab { display: none; }
+    .tab.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; }
+    .stat-label { font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
+    .stat-value { font-size: 30px; font-weight: 600; color: white; }
+    .card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: border-color 0.2s; }
+    .card:hover { border-color: #475569; }
+    .card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .card-title { font-size: 16px; font-weight: 500; color: white; }
+    .card-meta { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 6px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+    .badge.green { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .badge.yellow { background: rgba(234, 179, 8, 0.2); color: #fde047; }
+    .input-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    input, select, textarea {
+      flex: 1; min-width: 120px; padding: 10px 14px; border: 1px solid #475569;
+      border-radius: 8px; font-size: 14px; color: white; background: #1e293b; font-family: inherit;
+    }
+    input::placeholder { color: #64748b; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; }
+    .btn { padding: 10px 18px; border: 1px solid #475569; border-radius: 8px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: white; transition: all 0.2s; white-space: nowrap; }
+    .btn:hover { background: #334155; }
+    .btn-primary { background: #3b82f6; border-color: #3b82f6; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-danger { color: #f87171; border-color: #7f1d1d; padding: 6px 12px; font-size: 13px; }
+    .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+    .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .agent-btn { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; color: white; width: 100%; }
+    .agent-btn:hover { background: #334155; border-color: #3b82f6; }
+    .agent-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+    .agent-desc { font-size: 12px; color: #94a3b8; }
+    .alert { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 3px solid #3b82f6; border-radius: 8px; padding: 14px; margin-bottom: 20px; font-size: 13px; color: #93c5fd; }
+    .section-title { font-size: 19px; font-weight: 500; margin-bottom: 16px; color: white; }
+    .empty { color: #64748b; font-size: 14px; padding: 20px; text-align: center; }
+    .stage-select { flex: 0; min-width: 130px; padding: 6px 10px; font-size: 13px; }
+    .agent-output { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-top: 20px; font-size: 14px; line-height: 1.7; white-space: pre-wrap; color: #e2e8f0; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #475569; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Recruitment Portal</div>
+      <div class="tagline">Senior executive placements · Australia-wide</div>
+    </div>
+
+    <div class="nav">
+      <button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
+      <button class="nav-btn" onclick="switchTab('vendors', this)">Vendors</button>
+      <button class="nav-btn" onclick="switchTab('candidates', this)">Candidates</button>
+      <button class="nav-btn" onclick="switchTab('pipeline', this)">Pipeline</button>
+      <button class="nav-btn" onclick="switchTab('agents', this)">Agents</button>
+    </div>
+
+    <div id="dashboard" class="tab active">
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Vendors</div><div class="stat-value" id="d-vendors">0</div></div>
+        <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value" id="d-candidates">0</div></div>
+        <div class="stat-card"><div class="stat-label">In Pipeline</div><div class="stat-value" id="d-pipeline">0</div></div>
+        <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="d-placed">0</div></div>
+      </div>
+      <div class="alert">Platform live. Add vendors you're selling to, source candidates on LinkedIn, then run agents to match and draft outreach.</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+        <button class="btn btn-primary" onclick="switchTab('vendors', document.querySelectorAll('.nav-btn')[1])">+ Add Vendor</button>
+        <button class="btn btn-primary" onclick="switchTab('candidates', document.querySelectorAll('.nav-btn')[2])">+ Add Candidate</button>
+      </div>
+    </div>
+
+    <div id="vendors" class="tab">
+      <div class="section-title">Vendors</div>
+      <div class="input-group">
+        <input type="text" id="v-name" placeholder="Company name">
+        <input type="text" id="v-industry" placeholder="Industry">
+        <input type="text" id="v-location" placeholder="Location">
+        <input type="text" id="v-role" placeholder="Role they need">
+        <button class="btn btn-primary" onclick="addVendor()">Add</button>
+      </div>
+      <div id="vendor-list"></div>
+    </div>
+
+    <div id="candidates" class="tab">
+      <div class="section-title">Candidates</div>
+      <div class="input-group">
+        <input type="text" id="c-name" placeholder="Name">
+        <input type="text" id="c-role" placeholder="Current role">
+        <input type="number" id="c-years" placeholder="Years">
+        <input type="text" id="c-location" placeholder="Location">
+        <input type="text" id="c-salary" placeholder="Salary $k">
+        <button class="btn btn-primary" onclick="addCandidate()">Add</button>
+      </div>
+      <div id="candidate-list"></div>
+    </div>
+
+    <div id="pipeline" class="tab">
+      <div class="section-title">Pipeline & Placements</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Sourced</div><div class="stat-value" id="p-sourced">0</div></div>
+        <div class="stat-card"><div class="stat-label">Interview</div><div class="stat-value" id="p-interview">0</div></div>
+        <div class="stat-card"><div class="stat-label">Offer</div><div class="stat-value" id="p-offer">0</div></div>
+        <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="p-placed">0</div></div>
+      </div>
+      <div class="alert">Move candidates through stages. Placed deals auto-calculate your 20% fee.</div>
+      <div id="pipeline-list"></div>
+    </div>
+
+    <div id="agents" class="tab">
+      <div class="section-title">AI Agents</div>
+      <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Agents run live on Claude. They work on your data plus live web research.</p>
+      <div class="agent-grid">
+        <button class="agent-btn" onclick="runAgent('vendor_research')"><div class="agent-title">Vendor Research</div><div class="agent-desc">Find Australia vendors hiring senior sales/BD</div></button>
+        <button class="agent-btn" onclick="runAgent('candidate_sourcing')"><div class="agent-title">Candidate Sourcing</div><div class="agent-desc">LinkedIn sourcing strategy + Boolean strings</div></button>
+        <button class="agent-btn" onclick="runAgent('matching')"><div class="agent-title">Matching Agent</div><div class="agent-desc">Score your candidates vs vendor roles</div></button>
+        <button class="agent-btn" onclick="runAgent('outreach')"><div class="agent-title">Outreach Agent</div><div class="agent-desc">Draft messages for your candidates</div></button>
+        <button class="agent-btn" onclick="runAgent('pipeline_intelligence')"><div class="agent-title">Pipeline Intelligence</div><div class="agent-desc">Analyze pipeline, flag bottlenecks</div></button>
+        <button class="agent-btn" onclick="runAgent('quality')"><div class="agent-title">Quality Agent</div><div class="agent-desc">Placement quality framework</div></button>
+      </div>
+      <div id="agent-output"></div>
+    </div>
+  </div>
+
+  <script>
+    let vendors = JSON.parse(localStorage.getItem('rp_vendors') || '[]');
+    let candidates = JSON.parse(localStorage.getItem('rp_candidates') || '[]');
+    let pipeline = JSON.parse(localStorage.getItem('rp_pipeline') || '[]');
+
+    function save() {
+      localStorage.setItem('rp_vendors', JSON.stringify(vendors));
+      localStorage.setItem('rp_candidates', JSON.stringify(candidates));
+      localStorage.setItem('rp_pipeline', JSON.stringify(pipeline));
+    }
+
+    function switchTab(tab, btn) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      if (btn) btn.classList.add('active');
+      render();
+    }
+
+    function addVendor() {
+      const name = document.getElementById('v-name').value.trim();
+      if (!name) return;
+      vendors.push({ id: Date.now(), name,
+        industry: document.getElementById('v-industry').value.trim(),
+        location: document.getElementById('v-location').value.trim(),
+        role: document.getElementById('v-role').value.trim() });
+      save();
+      ['v-name','v-industry','v-location','v-role'].forEach(id => document.getElementById(id).value = '');
+      render();
+    }
+
+    function addCandidate() {
+      const name = document.getElementById('c-name').value.trim();
+      if (!name) return;
+      const cand = { id: Date.now(), name,
+        role: document.getElementById('c-role').value.trim(),
+        years: document.getElementById('c-years').value.trim(),
+        location: document.getElementById('c-location').value.trim(),
+        salary: document.getElementById('c-salary').value.trim(),
+        stage: 'sourced' };
+      candidates.push(cand);
+      pipeline.push({ id: cand.id, name: cand.name, salary: cand.salary, stage: 'sourced' });
+      save();
+      ['c-name','c-role','c-years','c-location','c-salary'].forEach(id => document.getElementById(id).value = '');
+      render();
+    }
+
+    function deleteVendor(id) { vendors = vendors.filter(v => v.id !== id); save(); render(); }
+    function deleteCandidate(id) { candidates = candidates.filter(c => c.id !== id); pipeline = pipeline.filter(p => p.id !== id); save(); render(); }
+    function updateStage(id, stage) {
+      const p = pipeline.find(p => p.id === id); if (p) p.stage = stage;
+      const c = candidates.find(c => c.id === id); if (c) c.stage = stage;
+      save(); render();
+    }
+
+    async function runAgent(type) {
+      const out = document.getElementById('agent-output');
+      out.innerHTML = '<div class="agent-output"><span class="spinner"></span>Running agent...</div>';
+      const vendorData = JSON.stringify(vendors);
+      const candidateData = JSON.stringify(candidates);
+
+      const prompts = {
+        vendor_research: { web: true, prompt: `You are a recruitment research agent. Find 5 Australia-based vendor/service companies (software, consulting, logistics, equipment, professional services) likely hiring senior sales, BD, account executive, director, VP, or MD roles. For each: company name, industry, location, why they might be hiring. Be specific and practical for a recruiter targeting them.` },
+        candidate_sourcing: { web: false, prompt: `You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, Account Executives, MDs at Australian vendor companies. Give a concrete LinkedIn sourcing strategy: exact search filters, Boolean search strings, signals a candidate is open to moving, and how to approach passive candidates. My current candidates: ${candidateData}` },
+        matching: { web: false, prompt: `You are a recruitment matching agent. My vendor roles: ${vendorData}. My candidates: ${candidateData}. Match each candidate to best-fit vendor role. Score 0-100 on skills, experience, location, salary. Explain reasoning. If no data, tell me what to add.` },
+        outreach: { web: false, prompt: `You are an outreach copywriter for a recruiter. My candidates: ${candidateData}. My vendor roles: ${vendorData}. Draft a personalized LinkedIn/email message for each candidate about a relevant role. Under 120 words each, warm but direct, clear CTA. If no data, give 2 strong templates.` },
+        pipeline_intelligence: { web: false, prompt: `You are a pipeline analyst. My pipeline: ${JSON.stringify(pipeline)}. Analyze conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), and 3 specific actions this week. If empty, tell me what to focus on first.` },
+        quality: { web: false, prompt: `You are a placement quality advisor. As a new recruitment business owner placing senior roles at Australian vendors, give a practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags to avoid. Actionable.` },
+      };
+
+      const config = prompts[type];
+      try {
+        const res = await fetch('/api/claude', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: config.prompt, useWebSearch: config.web }),
+        });
+        const data = await res.json();
+        if (data.error) {
+          out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + data.error + '</div>';
+        } else {
+          out.innerHTML = '<div class="agent-output">' + data.text.replace(/</g, '&lt;') + '</div>';
+        }
+      } catch (e) {
+        out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Connection error: ' + e.message + '</div>';
+      }
+    }
+
+    function render() {
+      document.getElementById('d-vendors').textContent = vendors.length;
+      document.getElementById('d-candidates').textContent = candidates.length;
+      document.getElementById('d-pipeline').textContent = pipeline.filter(p => p.stage !== 'placed').length;
+      document.getElementById('d-placed').textContent = pipeline.filter(p => p.stage === 'placed').length;
+
+      document.getElementById('vendor-list').innerHTML = vendors.length === 0
+        ? '<div class="empty">No vendors yet. Add companies you\'re selling recruitment services to.</div>'
+        : vendors.map(v => `<div class="card"><div class="card-row"><div><div class="card-title">${v.name}</div><div class="card-meta">${v.industry||'Industry n/a'} · ${v.location||'Location n/a'}${v.role?' · Needs: '+v.role:''}</div></div><button class="btn btn-danger" onclick="deleteVendor(${v.id})">Remove</button></div></div>`).join('');
+
+      document.getElementById('candidate-list').innerHTML = candidates.length === 0
+        ? '<div class="empty">No candidates yet. Source from LinkedIn and add them here.</div>'
+        : candidates.map(c => `<div class="card"><div class="card-row"><div><div class="card-title">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div></div><button class="btn btn-danger" onclick="deleteCandidate(${c.id})">Remove</button></div></div>`).join('');
+
+      ['sourced','interview','offer','placed'].forEach(s => {
+        document.getElementById('p-' + s).textContent = pipeline.filter(p => p.stage === s).length;
+      });
+
+      document.getElementById('pipeline-list').innerHTML = pipeline.length === 0
+        ? '<div class="empty">No pipeline activity. Add candidates to start tracking.</div>'
+        : pipeline.map(p => {
+          const fee = p.stage === 'placed' && p.salary ? Math.round(p.salary * 1000 * 0.2) : null;
+          const potential = p.salary ? Math.round(p.salary * 1000 * 0.2) : null;
+          const badgeClass = p.stage === 'placed' ? 'green' : (p.stage === 'interview' || p.stage === 'offer') ? 'yellow' : '';
+          return `<div class="card"><div class="card-row"><div><div class="card-title">${p.name}</div><div class="card-meta">${fee ? 'Fee earned: $' + fee.toLocaleString() : (potential ? 'Potential fee: $' + potential.toLocaleString() : 'No salary set')}</div></div><div style="display:flex; gap:8px; align-items:center;"><span class="badge ${badgeClass}">${p.stage}</span><select class="stage-select" onchange="updateStage(${p.id}, this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select></div></div></div>`;
+        }).join('');
+    }
+
+    render();
+  </script>
+</body>
+</html>
