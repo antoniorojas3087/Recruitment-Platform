@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     const { prompt, useWebSearch } = req.body;
 
     const body = {
-      model: 'claude-sonnet-4-20250514',
+      model: 'model: 'claude-sonnet-4-6',',
       max_tokens: 2048,
       messages: [{ role: 'user', content: prompt }],
     };
