@@ -1,60 +1,68 @@
 export default async function handler(req, res) {
-  // Allow CORS for same-origin
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+    return res.status(200).json({ ok: true });
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: 'API key not configured. Add ANTHROPIC_API_KEY in Vercel environment variables.' });
+    return res.status(200).json({ error: 'Use POST' });
   }
 
   try {
-    const { prompt, useWebSearch } = req.body;
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return res.status(200).json({ error: 'API key not set. Add ANTHROPIC_API_KEY in Vercel Environment Variables, then redeploy.' });
+    }
 
-    const body = {
-      model: 'model: 'claude-sonnet-4-6',',
+    // Safely parse body — Vercel may pass it as object or string
+    let body = req.body;
+    if (typeof body === 'string') {
+      try { body = JSON.parse(body); } catch (e) { body = {}; }
+    }
+    if (!body || typeof body !== 'object') {
+      body = {};
+    }
+
+    const prompt = body.prompt || 'Say hello.';
+    const useWebSearch = body.useWebSearch === true;
+
+    const payload = {
+      model: 'claude-sonnet-4-6',
       max_tokens: 2048,
       messages: [{ role: 'user', content: prompt }],
     };
 
-    // Enable web search for research/sourcing agents
     if (useWebSearch) {
-      body.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
+      payload.tools = [{ type: 'web_search_20250305', name: 'web_search' }];
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
+    const data = await anthropicRes.json();
 
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || 'API error' });
+    if (!anthropicRes.ok) {
+      const msg = (data && data.error && data.error.message) ? data.error.message : 'Anthropic API error';
+      return res.status(200).json({ error: msg });
     }
 
-    // Extract all text blocks from the response
-    const text = data.content
+    const text = (data.content || [])
       .filter(item => item.type === 'text')
       .map(item => item.text)
       .join('\n');
 
     return res.status(200).json({ text: text || 'No response generated.' });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(200).json({ error: 'Server error: ' + (error.message || String(error)) });
   }
 }
