@@ -3,21 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recruitment Portal</title>
+  <title>Romaris Partners</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-      min-height: 100vh; color: #e2e8f0; padding: 24px;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh; color: #e2e8f0; padding: 24px; }
     .container { max-width: 1200px; margin: 0 auto; }
     .header { margin-bottom: 24px; display:flex; justify-content:space-between; align-items:center; }
-    .logo {
-      font-size: 26px; font-weight: 700;
-      background: linear-gradient(to right, #60a5fa, #a855f7);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
+    .logo { font-size: 26px; font-weight: 700; background: linear-gradient(to right, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .tagline { font-size: 13px; color: #64748b; }
     .sync { font-size: 12px; color: #64748b; }
     .sync.ok { color: #86efac; }
@@ -37,10 +29,11 @@
     .card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
     .card-title { font-size: 16px; font-weight: 500; color: white; }
     .card-meta { font-size: 13px; color: #94a3b8; margin-top: 4px; }
+    .card-skills { font-size: 12px; color: #64748b; margin-top: 6px; }
     .badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 6px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
     .badge.green { background: rgba(34, 197, 94, 0.2); color: #86efac; }
     .badge.yellow { background: rgba(234, 179, 8, 0.2); color: #fde047; }
-    .input-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .input-group { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
     input, select, textarea { flex: 1; min-width: 120px; padding: 10px 14px; border: 1px solid #475569; border-radius: 8px; font-size: 14px; color: white; background: #1e293b; font-family: inherit; }
     input::placeholder { color: #64748b; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; }
@@ -50,6 +43,9 @@
     .btn-primary:hover { background: #2563eb; }
     .btn-danger { color: #f87171; border-color: #7f1d1d; padding: 6px 12px; font-size: 13px; }
     .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+    .upload-zone { background: #1e293b; border: 1px dashed #475569; border-radius: 10px; padding: 20px; margin-bottom: 16px; display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap: wrap; }
+    .upload-zone .label { font-size: 14px; color: #cbd5e1; }
+    .upload-zone .hint { font-size: 12px; color: #64748b; margin-top: 2px; }
     .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
     .agent-btn { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; color: white; width: 100%; }
     .agent-btn:hover { background: #334155; border-color: #3b82f6; }
@@ -62,14 +58,30 @@
     .agent-output { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-top: 20px; font-size: 14px; line-height: 1.7; white-space: pre-wrap; color: #e2e8f0; }
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #475569; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .hidden-input { display: none; }
+    .match-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 12px; }
+    .match-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; }
+    .match-name { font-size: 16px; font-weight: 600; color: white; }
+    .score-pill { font-size: 18px; font-weight: 700; padding: 6px 14px; border-radius: 8px; }
+    .score-high { background: rgba(34,197,94,0.2); color: #86efac; }
+    .score-mid { background: rgba(234,179,8,0.2); color: #fde047; }
+    .score-low { background: rgba(148,163,184,0.2); color: #cbd5e1; }
+    .dim-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(90px,1fr)); gap: 8px; margin: 10px 0; }
+    .dim { background:#1e293b; border-radius:6px; padding:8px; text-align:center; }
+    .dim-label { font-size: 10px; color:#64748b; text-transform:uppercase; }
+    .dim-val { font-size: 16px; font-weight:600; color:white; margin-top:2px; }
+    .match-reason { font-size: 13px; color:#cbd5e1; line-height:1.6; margin-top:8px; }
+    .match-flag { font-size: 12px; margin-top:6px; }
+    .flag-edge { color:#86efac; }
+    .flag-risk { color:#fca5a5; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div>
-        <div class="logo">Recruitment Portal</div>
-        <div class="tagline">Senior executive placements · Australia-wide</div>
+        <div class="logo">Romaris Partners</div>
+        <div class="tagline">Precision executive search · Australia to APAC</div>
       </div>
       <div class="sync" id="sync-status">Connecting...</div>
     </div>
@@ -78,6 +90,7 @@
       <button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
       <button class="nav-btn" onclick="switchTab('vendors', this)">Vendors</button>
       <button class="nav-btn" onclick="switchTab('candidates', this)">Candidates</button>
+      <button class="nav-btn" onclick="switchTab('match', this)">Match</button>
       <button class="nav-btn" onclick="switchTab('pipeline', this)">Pipeline</button>
       <button class="nav-btn" onclick="switchTab('agents', this)">Agents</button>
     </div>
@@ -89,15 +102,24 @@
         <div class="stat-card"><div class="stat-label">In Pipeline</div><div class="stat-value" id="d-pipeline">0</div></div>
         <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="d-placed">0</div></div>
       </div>
-      <div class="alert">Data synced to your database. Access from any device. Add vendors, source candidates, run agents.</div>
+      <div class="alert">Upload CVs and job descriptions — the AI reads them in full. Then go to <strong>Match</strong> to score every candidate against a role across experience, education, achievements, and fit.</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-        <button class="btn btn-primary" onclick="switchTab('vendors', document.querySelectorAll('.nav-btn')[1])">+ Add Vendor</button>
-        <button class="btn btn-primary" onclick="switchTab('candidates', document.querySelectorAll('.nav-btn')[2])">+ Add Candidate</button>
+        <button class="btn btn-primary" onclick="switchTab('vendors', document.querySelectorAll('.nav-btn')[1])">+ Vendor / Job Desc</button>
+        <button class="btn btn-primary" onclick="switchTab('candidates', document.querySelectorAll('.nav-btn')[2])">+ Candidate / CV</button>
       </div>
     </div>
 
     <div id="vendors" class="tab">
-      <div class="section-title">Vendors</div>
+      <div class="section-title">Vendors & Roles</div>
+      <div class="upload-zone">
+        <div>
+          <div class="label">Upload a job description (PDF)</div>
+          <div class="hint">AI reads the full JD and stores complete requirements for precise matching</div>
+        </div>
+        <button class="btn btn-primary" onclick="document.getElementById('jd-file').click()">Upload Job Description</button>
+        <input type="file" id="jd-file" class="hidden-input" accept="application/pdf,image/*" onchange="analyzeJD(this)">
+      </div>
+      <div id="jd-status"></div>
       <div class="input-group">
         <input type="text" id="v-name" placeholder="Company name">
         <input type="text" id="v-industry" placeholder="Industry">
@@ -110,6 +132,15 @@
 
     <div id="candidates" class="tab">
       <div class="section-title">Candidates</div>
+      <div class="upload-zone">
+        <div>
+          <div class="label">Upload CVs (PDF) — select multiple at once</div>
+          <div class="hint">AI reads each full CV — experience, education, achievements — and stores it for scoring</div>
+        </div>
+        <button class="btn btn-primary" onclick="document.getElementById('cv-file').click()">Upload CVs</button>
+        <input type="file" id="cv-file" class="hidden-input" accept="application/pdf,image/*" multiple onchange="analyzeCV(this)">
+      </div>
+      <div id="cv-status"></div>
       <div class="input-group">
         <input type="text" id="c-name" placeholder="Name">
         <input type="text" id="c-role" placeholder="Current role">
@@ -119,6 +150,16 @@
         <button class="btn btn-primary" onclick="addCandidate()">Add</button>
       </div>
       <div id="candidate-list"></div>
+    </div>
+
+    <div id="match" class="tab">
+      <div class="section-title">Precision Match Engine</div>
+      <div class="alert">Pick a role. The AI scores every candidate against it across experience, education, achievements, trajectory, and fit — then ranks them best to worst with reasoning.</div>
+      <div class="input-group">
+        <select id="match-role" style="flex:1;"></select>
+        <button class="btn btn-primary" onclick="runMatch()">Score Candidates</button>
+      </div>
+      <div id="match-output"></div>
     </div>
 
     <div id="pipeline" class="tab">
@@ -139,7 +180,6 @@
       <div class="agent-grid">
         <button class="agent-btn" onclick="runAgent('vendor_research')"><div class="agent-title">Vendor Research</div><div class="agent-desc">Find Australia vendors hiring senior sales/BD</div></button>
         <button class="agent-btn" onclick="runAgent('candidate_sourcing')"><div class="agent-title">Candidate Sourcing</div><div class="agent-desc">LinkedIn sourcing strategy + Boolean strings</div></button>
-        <button class="agent-btn" onclick="runAgent('matching')"><div class="agent-title">Matching Agent</div><div class="agent-desc">Score your candidates vs vendor roles</div></button>
         <button class="agent-btn" onclick="runAgent('outreach')"><div class="agent-title">Outreach Agent</div><div class="agent-desc">Draft messages for your candidates</div></button>
         <button class="agent-btn" onclick="runAgent('pipeline_intelligence')"><div class="agent-title">Pipeline Intelligence</div><div class="agent-desc">Analyze pipeline, flag bottlenecks</div></button>
         <button class="agent-btn" onclick="runAgent('quality')"><div class="agent-title">Quality Agent</div><div class="agent-desc">Placement quality framework</div></button>
@@ -156,11 +196,7 @@
 
     let vendors = [], candidates = [], pipeline = [];
 
-    function setSync(text, ok) {
-      const el = document.getElementById('sync-status');
-      el.textContent = text;
-      el.className = 'sync' + (ok ? ' ok' : '');
-    }
+    function setSync(text, ok) { const el = document.getElementById('sync-status'); el.textContent = text; el.className = 'sync' + (ok ? ' ok' : ''); }
 
     async function loadAll() {
       setSync('Syncing...', false);
@@ -170,98 +206,175 @@
           sb.from('candidates').select('*').order('created_at', { ascending: false }),
           sb.from('pipeline').select('*').order('created_at', { ascending: false }),
         ]);
-        vendors = v.data || [];
-        candidates = c.data || [];
-        pipeline = p.data || [];
-        setSync('Synced ✓', true);
-        render();
-      } catch (e) {
-        setSync('Sync error', false);
-      }
+        vendors = v.data || []; candidates = c.data || []; pipeline = p.data || [];
+        setSync('Synced ✓', true); render();
+      } catch (e) { setSync('Sync error', false); }
     }
 
     function switchTab(tab, btn) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(tab).classList.add('active');
-      if (btn) btn.classList.add('active');
-      render();
+      if (btn) btn.classList.add('active'); render();
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function callClaude(payload) {
+      const res = await fetch('/api/claude', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      return data.text;
+    }
+
+    function parseJSON(text) {
+      const clean = text.replace(/```json/g, '').replace(/```/g, '').trim();
+      const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
+      return JSON.parse(clean.substring(start, end + 1));
+    }
+
+    async function analyzeCV(input) {
+      const files = Array.from(input.files); if (files.length === 0) return;
+      const status = document.getElementById('cv-status');
+      const prompt = `Analyze this CV/resume in full. Return ONLY a JSON object, no other text, with these exact keys:
+{"name":"","role":"current job title","years":"total years experience, number only","location":"city, country","salary":"current or expected salary in thousands, number only","skills":"comma-separated top 6 skills","full_profile":"a detailed 150-word professional summary covering: career trajectory, key achievements with numbers (revenue, deals, team size), education and qualifications, industry depth, and standout strengths. Be specific and factual from the CV."}
+If a field is unknown, use empty string.`;
+
+      let done = 0, failed = 0;
+      for (let i = 0; i < files.length; i++) {
+        status.innerHTML = '<div class="alert"><span class="spinner"></span>Processing CV ' + (i+1) + ' of ' + files.length + '... (' + done + ' added' + (failed?', '+failed+' failed':'') + ')</div>';
+        try {
+          const base64 = await fileToBase64(files[i]);
+          const text = await callClaude({ prompt, document: base64, mediaType: files[i].type });
+          const p = parseJSON(text);
+          const id = Date.now() + i;
+          const cand = { id, name: p.name || files[i].name, role: p.role || '', years: String(p.years || ''), location: p.location || '', salary: String(p.salary || ''), skills: p.skills || '', full_profile: p.full_profile || '', stage: 'sourced' };
+          await sb.from('candidates').insert(cand);
+          await sb.from('pipeline').insert({ id, name: cand.name, salary: cand.salary, stage: 'sourced' });
+          done++;
+        } catch (e) { failed++; }
+      }
+      status.innerHTML = '<div class="alert" style="border-left-color:#86efac; color:#86efac;">✓ Done. ' + done + ' candidate' + (done!==1?'s':'') + ' added' + (failed ? ', ' + failed + ' failed (try those individually)' : '') + '.</div>';
+      input.value = ''; loadAll();
+    }
+
+    async function analyzeJD(input) {
+      const file = input.files[0]; if (!file) return;
+      const status = document.getElementById('jd-status');
+      status.innerHTML = '<div class="alert"><span class="spinner"></span>Reading full job description...</div>';
+      try {
+        const base64 = await fileToBase64(file);
+        const prompt = `Analyze this job description in full. Return ONLY a JSON object, no other text, with these exact keys:
+{"name":"hiring company name","industry":"","location":"city, country","role":"the role title","full_jd":"a detailed 150-word summary of requirements: must-have experience and years, required skills, education/qualifications, seniority level, key responsibilities, salary range if stated, and what an ideal candidate looks like. Be specific from the JD."}
+If a field is unknown, use empty string.`;
+        const text = await callClaude({ prompt, document: base64, mediaType: file.type });
+        const v = parseJSON(text);
+        const row = { id: Date.now(), name: v.name || 'Unnamed company', industry: v.industry || '', location: v.location || '', role: v.role || '', full_jd: v.full_jd || '' };
+        await sb.from('vendors').insert(row);
+        status.innerHTML = '<div class="alert" style="border-left-color:#86efac; color:#86efac;">✓ Added role at ' + row.name + ' — ' + (row.role || 'role n/a') + '. Full requirements stored.</div>';
+        input.value = ''; loadAll();
+      } catch (e) { status.innerHTML = '<div class="alert" style="border-left-color:#f87171; color:#fca5a5;">Error: ' + e.message + '</div>'; }
+    }
+
+    async function runMatch() {
+      const roleId = document.getElementById('match-role').value;
+      const out = document.getElementById('match-output');
+      if (!roleId) { out.innerHTML = '<div class="alert">Add a vendor role first (upload a JD or add manually).</div>'; return; }
+      if (candidates.length === 0) { out.innerHTML = '<div class="alert">Add candidates first (upload CVs or add manually).</div>'; return; }
+      const role = vendors.find(v => String(v.id) === String(roleId));
+      out.innerHTML = '<div class="agent-output"><span class="spinner"></span>Scoring every candidate against this role across all dimensions...</div>';
+
+      const roleText = `Company: ${role.name}. Industry: ${role.industry}. Location: ${role.location}. Role: ${role.role}. Full requirements: ${role.full_jd || 'Not provided — infer from role title.'}`;
+      const candText = candidates.map(c => `ID ${c.id} | ${c.name} | ${c.role} | ${c.years} yrs | ${c.location} | $${c.salary}k | Skills: ${c.skills} | Profile: ${c.full_profile || 'limited data'}`).join('\n');
+
+      const prompt = `You are an expert executive recruiter scoring candidates for a role. Be precise and critical — only the genuinely best should score high.
+
+ROLE:
+${roleText}
+
+CANDIDATES:
+${candText}
+
+Score each candidate 0-100 overall, plus sub-scores 0-100 for: experience (depth + relevance), education (qualifications), achievements (measurable results), fit (location, salary, industry alignment). Rank best to worst.
+
+Return ONLY a JSON object, no other text:
+{"matches":[{"id":candidate_id,"name":"","overall":0,"experience":0,"education":0,"achievements":0,"fit":0,"reason":"2 sentences on why this score","edge":"their single biggest advantage","risk":"the main concern or gap"}]}
+Order the matches array from highest overall to lowest.`;
+
+      try {
+        const text = await callClaude({ prompt });
+        const result = parseJSON(text);
+        const matches = (result.matches || []).sort((a,b) => b.overall - a.overall);
+        out.innerHTML = '<div style="margin-bottom:12px; color:#94a3b8; font-size:13px;">Ranked for: <strong style="color:white;">' + role.name + ' — ' + role.role + '</strong></div>' +
+          matches.map(m => {
+            const cls = m.overall >= 80 ? 'score-high' : m.overall >= 60 ? 'score-mid' : 'score-low';
+            return `<div class="match-card">
+              <div class="match-head">
+                <div class="match-name">${m.name}</div>
+                <div class="score-pill ${cls}">${m.overall}</div>
+              </div>
+              <div class="dim-grid">
+                <div class="dim"><div class="dim-label">Experience</div><div class="dim-val">${m.experience}</div></div>
+                <div class="dim"><div class="dim-label">Education</div><div class="dim-val">${m.education}</div></div>
+                <div class="dim"><div class="dim-label">Achievements</div><div class="dim-val">${m.achievements}</div></div>
+                <div class="dim"><div class="dim-label">Fit</div><div class="dim-val">${m.fit}</div></div>
+              </div>
+              <div class="match-reason">${m.reason}</div>
+              <div class="match-flag flag-edge">▲ Edge: ${m.edge}</div>
+              <div class="match-flag flag-risk">▼ Risk: ${m.risk}</div>
+            </div>`;
+          }).join('');
+      } catch (e) {
+        out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + e.message + '</div>';
+      }
     }
 
     async function addVendor() {
-      const name = document.getElementById('v-name').value.trim();
-      if (!name) return;
-      const row = { id: Date.now(), name,
-        industry: document.getElementById('v-industry').value.trim(),
-        location: document.getElementById('v-location').value.trim(),
-        role: document.getElementById('v-role').value.trim() };
+      const name = document.getElementById('v-name').value.trim(); if (!name) return;
+      const row = { id: Date.now(), name, industry: document.getElementById('v-industry').value.trim(), location: document.getElementById('v-location').value.trim(), role: document.getElementById('v-role').value.trim(), full_jd: '' };
       await sb.from('vendors').insert(row);
       ['v-name','v-industry','v-location','v-role'].forEach(id => document.getElementById(id).value = '');
       loadAll();
     }
 
     async function addCandidate() {
-      const name = document.getElementById('c-name').value.trim();
-      if (!name) return;
+      const name = document.getElementById('c-name').value.trim(); if (!name) return;
       const id = Date.now();
-      const cand = { id, name,
-        role: document.getElementById('c-role').value.trim(),
-        years: document.getElementById('c-years').value.trim(),
-        location: document.getElementById('c-location').value.trim(),
-        salary: document.getElementById('c-salary').value.trim(),
-        stage: 'sourced' };
+      const cand = { id, name, role: document.getElementById('c-role').value.trim(), years: document.getElementById('c-years').value.trim(), location: document.getElementById('c-location').value.trim(), salary: document.getElementById('c-salary').value.trim(), skills: '', full_profile: '', stage: 'sourced' };
       await sb.from('candidates').insert(cand);
       await sb.from('pipeline').insert({ id, name: cand.name, salary: cand.salary, stage: 'sourced' });
       ['c-name','c-role','c-years','c-location','c-salary'].forEach(id => document.getElementById(id).value = '');
       loadAll();
     }
 
-    async function deleteVendor(id) {
-      await sb.from('vendors').delete().eq('id', id);
-      loadAll();
-    }
-    async function deleteCandidate(id) {
-      await sb.from('candidates').delete().eq('id', id);
-      await sb.from('pipeline').delete().eq('id', id);
-      loadAll();
-    }
-    async function updateStage(id, stage) {
-      await sb.from('pipeline').update({ stage }).eq('id', id);
-      await sb.from('candidates').update({ stage }).eq('id', id);
-      loadAll();
-    }
+    async function deleteVendor(id) { await sb.from('vendors').delete().eq('id', id); loadAll(); }
+    async function deleteCandidate(id) { await sb.from('candidates').delete().eq('id', id); await sb.from('pipeline').delete().eq('id', id); loadAll(); }
+    async function updateStage(id, stage) { await sb.from('pipeline').update({ stage }).eq('id', id); await sb.from('candidates').update({ stage }).eq('id', id); loadAll(); }
 
     async function runAgent(type) {
       const out = document.getElementById('agent-output');
       out.innerHTML = '<div class="agent-output"><span class="spinner"></span>Running agent...</div>';
-      const vendorData = JSON.stringify(vendors);
-      const candidateData = JSON.stringify(candidates);
-
+      const vendorData = JSON.stringify(vendors.map(v => ({name:v.name, role:v.role, location:v.location})));
+      const candidateData = JSON.stringify(candidates.map(c => ({name:c.name, role:c.role, years:c.years, location:c.location})));
       const prompts = {
-        vendor_research: { web: true, prompt: `You are a recruitment research agent. Find 5 Australia-based vendor/service companies (software, consulting, logistics, equipment, professional services) likely hiring senior sales, BD, account executive, director, VP, or MD roles. For each: company name, industry, location, why they might be hiring. Be specific and practical for a recruiter targeting them.` },
-        candidate_sourcing: { web: false, prompt: `You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, Account Executives, MDs at Australian vendor companies. Give a concrete LinkedIn sourcing strategy: exact search filters, Boolean search strings, signals a candidate is open to moving, and how to approach passive candidates. My current candidates: ${candidateData}` },
-        matching: { web: false, prompt: `You are a recruitment matching agent. My vendor roles: ${vendorData}. My candidates: ${candidateData}. Match each candidate to best-fit vendor role. Score 0-100 on skills, experience, location, salary. Explain reasoning. If no data, tell me what to add.` },
-        outreach: { web: false, prompt: `You are an outreach copywriter for a recruiter. My candidates: ${candidateData}. My vendor roles: ${vendorData}. Draft a personalized LinkedIn/email message for each candidate about a relevant role. Under 120 words each, warm but direct, clear CTA. If no data, give 2 strong templates.` },
-        pipeline_intelligence: { web: false, prompt: `You are a pipeline analyst. My pipeline: ${JSON.stringify(pipeline)}. Analyze conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), and 3 specific actions this week. If empty, tell me what to focus on first.` },
-        quality: { web: false, prompt: `You are a placement quality advisor. As a new recruitment business owner placing senior roles at Australian vendors, give a practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags to avoid. Actionable.` },
+        vendor_research: { web: true, prompt: `You are a recruitment research agent. Find 5 Australia-based vendor/service companies likely hiring senior sales, BD, account executive, director, VP, or MD roles. For each: company name, industry, location, why they might be hiring. Be specific.` },
+        candidate_sourcing: { web: false, prompt: `You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, Account Executives, MDs at Australian vendor companies. Give a concrete LinkedIn sourcing strategy: exact filters, Boolean strings, signals a candidate is open to moving. My current candidates: ${candidateData}` },
+        outreach: { web: false, prompt: `You are an outreach copywriter for a recruiter. My candidates: ${candidateData}. My vendor roles: ${vendorData}. Draft a personalized message for each candidate about a relevant role. Under 120 words each, warm but direct. If no data, give 2 templates.` },
+        pipeline_intelligence: { web: false, prompt: `You are a pipeline analyst. My pipeline: ${JSON.stringify(pipeline.map(p=>({name:p.name,stage:p.stage,salary:p.salary})))}. Analyze conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), 3 actions this week. If empty, what to focus on first.` },
+        quality: { web: false, prompt: `You are a placement quality advisor. Give a practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags. Actionable.` },
       };
-
       const config = prompts[type];
       try {
-        const res = await fetch('/api/claude', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: config.prompt, useWebSearch: config.web }),
-        });
-        const data = await res.json();
-        if (data.error) {
-          out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + data.error + '</div>';
-        } else {
-          out.innerHTML = '<div class="agent-output">' + data.text.replace(/</g, '&lt;') + '</div>';
-        }
-      } catch (e) {
-        out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Connection error: ' + e.message + '</div>';
-      }
+        const text = await callClaude({ prompt: config.prompt, useWebSearch: config.web });
+        out.innerHTML = '<div class="agent-output">' + text.replace(/</g, '&lt;') + '</div>';
+      } catch (e) { out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + e.message + '</div>'; }
     }
 
     function render() {
@@ -270,17 +383,21 @@
       document.getElementById('d-pipeline').textContent = pipeline.filter(p => p.stage !== 'placed').length;
       document.getElementById('d-placed').textContent = pipeline.filter(p => p.stage === 'placed').length;
 
+      // populate match role dropdown
+      const sel = document.getElementById('match-role');
+      const current = sel.value;
+      sel.innerHTML = vendors.length === 0 ? '<option value="">No roles yet</option>' : vendors.map(v => `<option value="${v.id}">${v.name} — ${v.role || 'role n/a'}</option>`).join('');
+      if (current) sel.value = current;
+
       document.getElementById('vendor-list').innerHTML = vendors.length === 0
-        ? '<div class="empty">No vendors yet. Add companies you\'re selling recruitment services to.</div>'
+        ? '<div class="empty">No vendors yet. Upload a job description or add manually.</div>'
         : vendors.map(v => `<div class="card"><div class="card-row"><div><div class="card-title">${v.name}</div><div class="card-meta">${v.industry||'Industry n/a'} · ${v.location||'Location n/a'}${v.role?' · Needs: '+v.role:''}</div></div><button class="btn btn-danger" onclick="deleteVendor(${v.id})">Remove</button></div></div>`).join('');
 
       document.getElementById('candidate-list').innerHTML = candidates.length === 0
-        ? '<div class="empty">No candidates yet. Source from LinkedIn and add them here.</div>'
-        : candidates.map(c => `<div class="card"><div class="card-row"><div><div class="card-title">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div></div><button class="btn btn-danger" onclick="deleteCandidate(${c.id})">Remove</button></div></div>`).join('');
+        ? '<div class="empty">No candidates yet. Upload a CV or add manually.</div>'
+        : candidates.map(c => `<div class="card"><div class="card-row"><div><div class="card-title">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-skills">Skills: '+c.skills+'</div>':''}</div><button class="btn btn-danger" onclick="deleteCandidate(${c.id})">Remove</button></div></div>`).join('');
 
-      ['sourced','interview','offer','placed'].forEach(s => {
-        document.getElementById('p-' + s).textContent = pipeline.filter(p => p.stage === s).length;
-      });
+      ['sourced','interview','offer','placed'].forEach(s => { document.getElementById('p-' + s).textContent = pipeline.filter(p => p.stage === s).length; });
 
       document.getElementById('pipeline-list').innerHTML = pipeline.length === 0
         ? '<div class="empty">No pipeline activity. Add candidates to start tracking.</div>'
