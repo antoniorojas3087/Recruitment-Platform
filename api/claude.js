@@ -6,7 +6,6 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     return res.status(200).json({ ok: true });
   }
-
   if (req.method !== 'POST') {
     return res.status(200).json({ error: 'Use POST' });
   }
@@ -17,22 +16,32 @@ export default async function handler(req, res) {
       return res.status(200).json({ error: 'API key not set. Add ANTHROPIC_API_KEY in Vercel Environment Variables, then redeploy.' });
     }
 
-    // Safely parse body — Vercel may pass it as object or string
     let body = req.body;
     if (typeof body === 'string') {
       try { body = JSON.parse(body); } catch (e) { body = {}; }
     }
-    if (!body || typeof body !== 'object') {
-      body = {};
-    }
+    if (!body || typeof body !== 'object') body = {};
 
     const prompt = body.prompt || 'Say hello.';
     const useWebSearch = body.useWebSearch === true;
+    const document = body.document;     // base64 string (no data: prefix)
+    const mediaType = body.mediaType;   // e.g. application/pdf, image/png
+
+    // Build message content. If a document is attached, include it.
+    let content;
+    if (document && mediaType) {
+      const docBlock = mediaType === 'application/pdf'
+        ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: document } }
+        : { type: 'image', source: { type: 'base64', media_type: mediaType, data: document } };
+      content = [docBlock, { type: 'text', text: prompt }];
+    } else {
+      content = prompt;
+    }
 
     const payload = {
       model: 'claude-sonnet-4-6',
-      max_tokens: 2048,
-      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 4096,
+      messages: [{ role: 'user', content }],
     };
 
     if (useWebSearch) {
