@@ -26,6 +26,7 @@ export default async function handler(req, res) {
     const useWebSearch = body.useWebSearch === true;
     const document = body.document;     // base64 string (no data: prefix)
     const mediaType = body.mediaType;   // e.g. application/pdf, image/png
+    const model = body.model || 'claude-sonnet-4-6';  // allow cheaper model per request
 
     // Build message content. If a document is attached, include it.
     let content;
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
     }
 
     const payload = {
-      model: 'claude-sonnet-4-6',
+      model: model,
       max_tokens: 4096,
       messages: [{ role: 'user', content }],
     };
