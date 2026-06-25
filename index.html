@@ -374,9 +374,16 @@
         </div>
       </div>
       <div class="doc-zone">
-        <div class="doc-zone-title">Your Notes</div>
-        <div class="doc-zone-hint">OPTIONAL · CALL NOTES, OBSERVATIONS, CONTEXT FOR THE CLIENT</div>
-        <textarea id="doc-notes" placeholder="e.g. Candidate 1 available immediately. Candidate 2 open to relocation from Sydney..." rows="4" style="width:100%; margin-top:8px;"></textarea>
+        <div class="doc-zone-title">Candidate Notes</div>
+        <div class="doc-zone-hint">PER CANDIDATE · INCLUDE SALARY EXPECTATION, AVAILABILITY, YOUR OBSERVATIONS</div>
+        <div style="margin-top:8px;">
+          <div style="font-size:11px; color:var(--text-3); margin-bottom:4px; font-family:'Space Mono',monospace; letter-spacing:0.08em;">CANDIDATE 1 NOTES</div>
+          <textarea id="notes-1" placeholder="e.g. Salary expectation $165k + super. Available 4 weeks notice. Strong cultural fit, very keen on the role." rows="2" style="width:100%; margin-bottom:12px;"></textarea>
+          <div style="font-size:11px; color:var(--text-3); margin-bottom:4px; font-family:'Space Mono',monospace; letter-spacing:0.08em;">CANDIDATE 2 NOTES</div>
+          <textarea id="notes-2" placeholder="e.g. Salary expectation $150k. Open to relocation from Sydney, needs relocation support." rows="2" style="width:100%; margin-bottom:12px;"></textarea>
+          <div style="font-size:11px; color:var(--text-3); margin-bottom:4px; font-family:'Space Mono',monospace; letter-spacing:0.08em;">CANDIDATE 3 NOTES</div>
+          <textarea id="notes-3" placeholder="e.g. Salary expectation $140k. Currently employed, discreet process required." rows="2" style="width:100%;"></textarea>
+        </div>
       </div>
       <div style="display:flex; gap:10px; align-items:center; margin-top:6px;">
         <button class="btn btn-navy btn-xl" onclick="generateShortlist()"><i class="ti ti-file-text"></i>Generate Document</button>
@@ -575,9 +582,22 @@ Order highest to lowest overall.`;
     const cvFiles=[cv1Data,cv2Data,cv3Data].filter(Boolean);
     if(!briefData&&!cvFiles.length){out.innerHTML='<div class="alert alert-error">Upload at least a position brief or one CV.</div>';return;}
     out.innerHTML='<div class="output-box"><span class="spinner"></span>Generating Romaris Partners shortlist document...</div>';
-    const notes=document.getElementById('doc-notes').value;
+    const n1=document.getElementById('notes-1').value;
+    const n2=document.getElementById('notes-2').value;
+    const n3=document.getElementById('notes-3').value;
+    let notesBlock='';
+    if(n1)notesBlock+='Candidate 1 notes: '+n1+'\n';
+    if(n2)notesBlock+='Candidate 2 notes: '+n2+'\n';
+    if(n3)notesBlock+='Candidate 3 notes: '+n3+'\n';
     const firstDoc=briefData||cvFiles[0];
-    const prompt=`You are creating a professional executive search shortlist document for Romaris Partners. Analyze all provided documents carefully.${notes?'\n\nRECRUITER NOTES: '+notes+'\n':''}
+    const prompt=`You are creating a professional executive search shortlist document for Romaris Partners. Analyze all provided documents carefully.${notesBlock?'\n\nRECRUITER NOTES (use these in each candidate section, including salary expectation and availability):\n'+notesBlock+'\n':''}
+
+Writing style rules (important):
+- Write in plain, professional Australian English, the way an experienced human recruiter writes to a client.
+- Never use em-dashes or hyphens as sentence separators. Use commas instead.
+- Avoid AI-sounding words like leverage, spearheaded, passionate, results-driven, dynamic, proven track record, seamless, robust, standout.
+- Write naturally with varied sentence length. Be factual and specific.
+- Each candidate's verdict must include their salary expectation and availability from the recruiter notes.
 
 Generate a complete professional HTML shortlist using this exact template:
 
@@ -621,16 +641,16 @@ body{font-family:'Space Grotesk',sans-serif;background:#f5f4f0;color:#1c1c1a;pad
 </div>
 <div class="logo-name">ROMARIS</div>
 <div class="logo-sub">PARTNERS</div>
-<div class="doc-title">Executive Search — Candidate Shortlist</div>
-<div class="doc-meta">PREPARED BY ANTONIO J. ROJAS · MANAGING PARTNER · ${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}).toUpperCase()}</div>
+<div class="doc-title">Executive Search, Candidate Shortlist</div>
+<div class="doc-meta">PREPARED BY ANTONIO J. ROJAS, MANAGING PARTNER, ${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}).toUpperCase()}</div>
 </div>
 <div class="body">
 [ROLE SECTION: sec-label "THE OPPORTUNITY", then role-box with role-title = role name, role-body = 3-4 sentence summary of the company, the role, key requirements, what they're looking for]
 
-[FOR EACH CANDIDATE: sec-label "CANDIDATE [N]", then candidate div with cand-name, cand-role = current role + company, cand-sec "PROFESSIONAL SUMMARY", cand-body = 3-4 sentence summary from CV, cand-sec "KEY ACHIEVEMENTS", cand-body = 3 bullet points of measurable achievements, score-row with 4 score-boxes for Experience/Education/Achievements/Fit each scored 0-100, verdict = 2-sentence fit assessment]
+[FOR EACH CANDIDATE: sec-label "CANDIDATE [N]", then candidate div with cand-name, cand-role = current role and company, cand-sec "PROFESSIONAL SUMMARY", cand-body = 3-4 sentence summary from CV, cand-sec "KEY ACHIEVEMENTS", cand-body = 3 bullet points (bullet character) of measurable achievements, cand-sec "EDUCATION", cand-body = degrees and qualifications from the CV, score-row with 4 score-boxes for Experience/Education/Achievements/Fit each scored 0-100, verdict = 2-3 sentence fit assessment that includes the candidate's salary expectation and availability from the recruiter notes]
 </div>
 <div class="footer">
-<div class="footer-name">Romaris Partners · Executive &amp; Technical Search</div>
+<div class="footer-name">Romaris Partners, Executive and Technical Search</div>
 <div class="footer-contact">ANTONIO@ROMARISPARTNERS.COM · +61 420 511 192 · LEVEL 5, 143 ST GEORGES TCE, PERTH WA 6000 · ROMARISPARTNERS.COM</div>
 </div>
 </body></html>
@@ -773,6 +793,12 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
 
 CANDIDATE DATA: ${profileData}
 
+Writing style rules (important):
+- Write in plain, professional Australian English, the way an experienced human recruiter writes.
+- Never use em-dashes or hyphens as sentence separators. Use commas instead.
+- Do not use AI-sounding words like "leverage", "spearheaded", "passionate", "results-driven", "dynamic", "proven track record", "seamless", "robust".
+- Write naturally, with varied sentence length. Be factual and specific, not flowery.
+
 Return ONLY a complete HTML document using this exact template:
 
 <!DOCTYPE html><html><head><meta charset="UTF-8">
@@ -804,23 +830,25 @@ body{font-family:'Space Grotesk',sans-serif;background:#fff;color:#1c1c1a;}
 <div class="header">
 <div class="lm"><span style="width:32px;background:#c2a14e;"></span><span style="width:24px;background:#c2a14e;margin-left:8px;"></span><span style="width:24px;background:#e7e5de;margin-left:8px;"></span><span style="width:16px;background:#e7e5de;margin-left:16px;"></span></div>
 <div class="lname">ROMARIS</div><div class="lsub">PARTNERS</div>
-<div class="tag">CONFIDENTIAL CANDIDATE PROFILE · PREPARED BY ROMARIS PARTNERS</div>
+<div class="tag">CONFIDENTIAL CANDIDATE PROFILE, PREPARED BY ROMARIS PARTNERS</div>
 </div>
 <div class="body">
 <div class="cand-name">${c.name}</div>
 [cand-role div: current role and company]
-[cand-meta div: years experience · location · salary expectation]
+[cand-meta div: years experience, location, salary expectation, separated by commas not dashes]
 <div class="sec">PROFESSIONAL SUMMARY</div>
-[body-text div: 4-5 sentence professional summary covering career trajectory, expertise, and what makes them strong]
+[body-text div: 4-5 sentence professional summary covering career history, expertise, and strengths, written naturally]
 <div class="sec">KEY ACHIEVEMENTS</div>
-[ach div: 4-5 bullet points (use • character) of specific achievements with numbers where available]
+[ach div: 4-5 bullet points (use the bullet character) of specific achievements with numbers where available]
+<div class="sec">EDUCATION &amp; QUALIFICATIONS</div>
+[body-text div: degrees, certifications, professional qualifications from the CV. If none are stated, write "Details available on request."]
 <div class="sec">CORE EXPERTISE</div>
 [skills-row div containing individual skill spans]
 </div>
 <div class="footer">
-<div class="fname">Romaris Partners · Executive &amp; Technical Search</div>
+<div class="fname">Romaris Partners, Executive and Technical Search</div>
 <div class="fcontact">ANTONIO@ROMARISPARTNERS.COM · +61 420 511 192 · LEVEL 5, 143 ST GEORGES TCE, PERTH WA 6000</div>
-<div class="conf">CONFIDENTIAL · NOT FOR DISTRIBUTION WITHOUT ROMARIS PARTNERS CONSENT</div>
+<div class="conf">CONFIDENTIAL, NOT FOR DISTRIBUTION WITHOUT ROMARIS PARTNERS CONSENT</div>
 </div>
 </body></html>
 
