@@ -488,11 +488,12 @@ Unknown fields = empty string.`;
           if(!up.error){ cv_path=sb.storage.from('cvs').getPublicUrl(path).data.publicUrl; }
         }catch(e){}
         const cand={id,name:p.name||files[i].name,role:p.role||'',years:String(p.years||''),location:p.location||'',salary:String(p.salary||''),skills:p.skills||'',full_profile:p.full_profile||'',cv_path,stage:'sourced'};
-        await sb.from('candidates').insert(cand);
+        const ins=await sb.from('candidates').insert(cand);
+        if(ins.error){ throw new Error(ins.error.message); }
         done++;
-      }catch(e){failed++;}
+      }catch(e){ failed++; window._lastCvError=e.message; }
     }
-    status.innerHTML=`<div class="alert alert-success">✓ Done. ${done} candidate${done!==1?'s':''} added${failed?', '+failed+' failed':''}.</div>`;
+    status.innerHTML=`<div class="alert ${done?'alert-success':'alert-error'}">${done?'✓ Done. '+done+' candidate'+(done!==1?'s':'')+' added':'✗ Upload failed'}${failed?'. '+failed+' failed'+(window._lastCvError?': '+window._lastCvError:''):''}.</div>`;
     input.value='';loadAll();
   }
 
