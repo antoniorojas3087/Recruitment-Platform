@@ -4,144 +4,316 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Romaris Partners</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.1.0/dist/tabler-icons.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh; color: #e2e8f0; padding: 24px; }
-    .container { max-width: 1200px; margin: 0 auto; }
-    .header { margin-bottom: 24px; display:flex; justify-content:space-between; align-items:center; }
-    .logo { font-size: 26px; font-weight: 700; background: linear-gradient(to right, #60a5fa, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .tagline { font-size: 13px; color: #64748b; }
-    .sync { font-size: 12px; color: #64748b; }
-    .sync.ok { color: #86efac; }
-    .nav { display: flex; gap: 4px; border-bottom: 1px solid #334155; margin-bottom: 28px; flex-wrap: wrap; }
-    .nav-btn { padding: 10px 18px; font-size: 14px; font-weight: 500; border: none; background: transparent; cursor: pointer; color: #94a3b8; border-bottom: 2px solid transparent; transition: all 0.2s; }
-    .nav-btn.active { color: white; border-bottom-color: #3b82f6; }
-    .nav-btn:hover { color: white; }
-    .tab { display: none; }
-    .tab.active { display: block; animation: fadeIn 0.3s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
-    .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; }
-    .stat-label { font-size: 13px; color: #94a3b8; margin-bottom: 8px; }
-    .stat-value { font-size: 30px; font-weight: 600; color: white; }
-    .card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 12px; transition: border-color 0.2s; }
-    .card:hover { border-color: #475569; }
-    .card-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-    .card-title { font-size: 16px; font-weight: 500; color: white; }
-    .card-meta { font-size: 13px; color: #94a3b8; margin-top: 4px; }
-    .card-skills { font-size: 12px; color: #64748b; margin-top: 6px; }
-    .badge { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 6px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
-    .badge.green { background: rgba(34, 197, 94, 0.2); color: #86efac; }
-    .badge.yellow { background: rgba(234, 179, 8, 0.2); color: #fde047; }
-    .input-group { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    input, select, textarea { flex: 1; min-width: 120px; padding: 10px 14px; border: 1px solid #475569; border-radius: 8px; font-size: 14px; color: white; background: #1e293b; font-family: inherit; }
-    input::placeholder { color: #64748b; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #3b82f6; }
-    .btn { padding: 10px 18px; border: 1px solid #475569; border-radius: 8px; background: transparent; cursor: pointer; font-size: 14px; font-weight: 500; color: white; transition: all 0.2s; white-space: nowrap; }
-    .btn:hover { background: #334155; }
-    .btn-primary { background: #3b82f6; border-color: #3b82f6; }
-    .btn-primary:hover { background: #2563eb; }
-    .btn-danger { color: #f87171; border-color: #7f1d1d; padding: 6px 12px; font-size: 13px; }
-    .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
-    .upload-zone { background: #1e293b; border: 1px dashed #475569; border-radius: 10px; padding: 20px; margin-bottom: 16px; display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap: wrap; }
-    .upload-zone .label { font-size: 14px; color: #cbd5e1; }
-    .upload-zone .hint { font-size: 12px; color: #64748b; margin-top: 2px; }
-    .agent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-    .agent-btn { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.2s; text-align: left; color: white; width: 100%; }
-    .agent-btn:hover { background: #334155; border-color: #3b82f6; }
-    .agent-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
-    .agent-desc { font-size: 12px; color: #94a3b8; }
-    .alert { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 3px solid #3b82f6; border-radius: 8px; padding: 14px; margin-bottom: 20px; font-size: 13px; color: #93c5fd; }
-    .section-title { font-size: 19px; font-weight: 500; margin-bottom: 16px; color: white; }
-    .empty { color: #64748b; font-size: 14px; padding: 20px; text-align: center; }
-    .stage-select { flex: 0; min-width: 130px; padding: 6px 10px; font-size: 13px; }
-    .agent-output { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-top: 20px; font-size: 14px; line-height: 1.7; white-space: pre-wrap; color: #e2e8f0; }
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #475569; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .hidden-input { display: none; }
-    .match-card { background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 18px; margin-bottom: 12px; }
-    .match-head { display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px; }
-    .match-name { font-size: 16px; font-weight: 600; color: white; }
-    .score-pill { font-size: 18px; font-weight: 700; padding: 6px 14px; border-radius: 8px; }
-    .score-high { background: rgba(34,197,94,0.2); color: #86efac; }
-    .score-mid { background: rgba(234,179,8,0.2); color: #fde047; }
-    .score-low { background: rgba(148,163,184,0.2); color: #cbd5e1; }
-    .dim-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(90px,1fr)); gap: 8px; margin: 10px 0; }
-    .dim { background:#1e293b; border-radius:6px; padding:8px; text-align:center; }
-    .dim-label { font-size: 10px; color:#64748b; text-transform:uppercase; }
-    .dim-val { font-size: 16px; font-weight:600; color:white; margin-top:2px; }
-    .match-reason { font-size: 13px; color:#cbd5e1; line-height:1.6; margin-top:8px; }
-    .match-flag { font-size: 12px; margin-top:6px; }
-    .flag-edge { color:#86efac; }
-    .flag-risk { color:#fca5a5; }
+    :root {
+      --gold:#c2a14e; --gold-hover:#b08f3e;
+      --navy:#15233a; --navy-mid:#233351; --navy-line:#2e3e58; --navy-text:#aeb6c4; --navy-dim:#5a6b85;
+      --bg:#f5f4f0; --surface:#ffffff; --surface2:#faf9f6;
+      --border:rgba(21,35,58,0.08); --border-strong:rgba(21,35,58,0.14);
+      --line:#f0eee8;
+      --text:#1c1c1a; --text-2:#54514a; --text-3:#8a857a; --text-4:#a39e91;
+      --success:#16a34a; --success-bg:#f0fdf4;
+      --warning:#d97706; --warning-bg:#fffbeb;
+      --info:#2563eb; --info-bg:#eff6ff;
+      --danger:#dc2626; --danger-bg:#fef2f2;
+      --shadow:0 1px 3px rgba(21,35,58,0.04);
+      --shadow-lg:0 4px 16px rgba(21,35,58,0.10);
+      --sidebar-w:210px; --r:14px; --r-sm:10px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { color-scheme:light; }
+    body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; -webkit-font-smoothing:antialiased; }
+    .layout { display:flex; min-height:100vh; }
+
+    /* SIDEBAR */
+    .sidebar { width:var(--sidebar-w); background:var(--navy); display:flex; flex-direction:column; position:fixed; top:0; bottom:0; left:0; z-index:20; }
+    .sb-logo { padding:24px 20px 20px; }
+    .logo-mark { display:flex; flex-direction:column; gap:3px; margin-bottom:12px; }
+    .logo-mark span { display:block; height:4px; border-radius:1px; }
+    .logo-mark span:nth-child(1){ width:28px; background:var(--gold); }
+    .logo-mark span:nth-child(2){ width:21px; background:var(--gold); margin-left:7px; }
+    .logo-mark span:nth-child(3){ width:21px; background:var(--navy-dim); margin-left:7px; }
+    .logo-mark span:nth-child(4){ width:14px; background:var(--navy-dim); margin-left:14px; }
+    .logo-wordmark { font-family:'Spectral',serif; font-weight:500; font-size:16px; letter-spacing:0.05em; color:#f3f1ea; }
+    .logo-sub { font-size:8px; letter-spacing:0.35em; color:var(--gold); margin-top:3px; }
+    .sb-nav { flex:1; padding:8px 12px; overflow-y:auto; }
+    .sb-section { font-size:9px; letter-spacing:0.2em; color:var(--navy-dim); padding:14px 8px 6px; }
+    .sb-btn { display:flex; align-items:center; gap:9px; width:100%; padding:9px 12px; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:500; color:var(--navy-text); background:transparent; border:none; border-radius:var(--r-sm); cursor:pointer; text-align:left; transition:all 0.12s; margin-bottom:2px; }
+    .sb-btn i { font-size:16px; color:var(--navy-dim); transition:color 0.12s; }
+    .sb-btn:hover { color:#f3f1ea; background:rgba(255,255,255,0.05); }
+    .sb-btn:hover i { color:var(--navy-text); }
+    .sb-btn.active { color:#f3f1ea; background:rgba(194,161,78,0.16); }
+    .sb-btn.active i { color:var(--gold); }
+    .sb-footer { padding:14px 20px; display:flex; align-items:center; gap:7px; }
+    .sync-dot { width:6px; height:6px; border-radius:50%; background:var(--navy-dim); flex-shrink:0; }
+    .sync-dot.ok { background:#4ade80; }
+    .sync-label { font-size:11px; color:var(--navy-dim); }
+
+    /* MAIN */
+    .main { margin-left:var(--sidebar-w); flex:1; padding:36px 40px; max-width:1080px; }
+    .pg-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:30px; gap:16px; flex-wrap:wrap; }
+    .pg-title { font-family:'Spectral',serif; font-weight:500; font-size:26px; color:var(--text); margin-bottom:4px; }
+    .pg-sub { font-size:13px; color:var(--text-3); }
+    .tab { display:none; }
+    .tab.active { display:block; animation:fadeIn 0.2s; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+    /* STAT CARDS */
+    .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:14px; }
+    .stat-card { background:var(--surface); border-radius:var(--r); padding:20px; box-shadow:var(--shadow); }
+    .stat-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .stat-label { font-size:11px; letter-spacing:0.1em; color:var(--text-4); }
+    .stat-card i { font-size:16px; color:var(--gold); }
+    .stat-num { font-family:'Spectral',serif; font-size:32px; font-weight:500; color:var(--text); line-height:1; }
+    .stat-delta { font-size:11px; margin-top:6px; color:var(--text-3); }
+    .stat-delta.up { color:var(--success); }
+    .stat-card.dark { background:var(--navy); box-shadow:var(--shadow-lg); }
+    .stat-card.dark .stat-label { color:var(--gold); }
+    .stat-card.dark .stat-num { color:#f3f1ea; }
+    .stat-card.dark .stat-delta { color:var(--navy-text); }
+
+    /* PANELS */
+    .panel { background:var(--surface); border-radius:var(--r); padding:22px; box-shadow:var(--shadow); }
+    .panel-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .panel-title { font-size:14px; font-weight:500; color:var(--text); }
+    .panel-link { font-size:11px; color:var(--gold); cursor:pointer; }
+    .panel-link:hover { color:var(--gold-hover); }
+
+    /* TASK LIST */
+    .task { display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+    .task:last-child { border-bottom:none; padding-bottom:0; }
+    .task i { font-size:18px; flex-shrink:0; }
+    .task-title { font-size:13px; color:var(--text); font-weight:500; }
+    .task-sub { font-size:12px; color:var(--text-3); margin-top:2px; }
+
+    /* PIPELINE BARS */
+    .pbar-row { margin-bottom:14px; }
+    .pbar-row:last-child { margin-bottom:0; }
+    .pbar-head { display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px; }
+    .pbar-head .l { color:var(--text-3); }
+    .pbar-head .v { color:var(--text); font-weight:500; }
+    .pbar-track { height:6px; background:var(--line); border-radius:3px; overflow:hidden; }
+    .pbar-fill { height:100%; border-radius:3px; }
+
+    /* CARDS */
+    .card { background:var(--surface); border-radius:var(--r); padding:16px 18px; margin-bottom:10px; box-shadow:var(--shadow); transition:box-shadow 0.12s; }
+    .card:hover { box-shadow:var(--shadow-lg); }
+    .card-row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .card-name { font-size:15px; font-weight:500; color:var(--text); margin-bottom:3px; }
+    .card-meta { font-size:13px; color:var(--text-2); }
+    .card-tags { font-family:'Space Mono',monospace; font-size:10px; color:var(--text-4); margin-top:5px; letter-spacing:0.04em; }
+
+    /* BADGES */
+    .badge { display:inline-block; font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.08em; padding:4px 10px; border-radius:6px; font-weight:700; }
+    .badge-sourced { background:var(--info-bg); color:var(--info); }
+    .badge-interview { background:var(--warning-bg); color:var(--warning); }
+    .badge-offer { background:rgba(194,161,78,0.14); color:var(--gold-hover); }
+    .badge-placed { background:var(--success-bg); color:var(--success); }
+
+    /* INPUTS */
+    .input-row { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+    input, select, textarea {
+      flex:1; min-width:110px; padding:10px 13px;
+      border:1px solid var(--border-strong); border-radius:var(--r-sm);
+      font-family:'Space Grotesk',sans-serif; font-size:13px;
+      color:var(--text); background:var(--surface); transition:all 0.12s;
+    }
+    input::placeholder, textarea::placeholder { color:var(--text-4); }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(194,161,78,0.12); }
+    select option { background:var(--surface); color:var(--text); }
+    textarea { resize:vertical; }
+
+    /* BUTTONS */
+    .btn { padding:10px 16px; border:1px solid var(--border-strong); border-radius:var(--r-sm); background:var(--surface); cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:13px; font-weight:500; color:var(--text); transition:all 0.12s; white-space:nowrap; display:inline-flex; align-items:center; gap:8px; }
+    .btn:hover { background:var(--surface2); box-shadow:var(--shadow); }
+    .btn i { font-size:16px; }
+    .btn-primary { background:var(--gold); border-color:var(--gold); color:#fff; font-weight:600; }
+    .btn-primary:hover { background:var(--gold-hover); border-color:var(--gold-hover); }
+    .btn-navy { background:var(--navy); border-color:var(--navy); color:#fff; font-weight:600; }
+    .btn-navy:hover { background:var(--navy-mid); }
+    .btn-navy i { color:var(--gold); }
+    .btn-ghost { color:var(--text-4); border-color:transparent; background:transparent; padding:6px 10px; font-size:12px; }
+    .btn-ghost:hover { color:var(--danger); background:var(--danger-bg); box-shadow:none; }
+    .btn-xl { padding:12px 22px; font-size:14px; }
+
+    /* UPLOAD ZONE */
+    .upload-zone { background:var(--surface); border:1px dashed var(--border-strong); border-radius:var(--r); padding:20px; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; box-shadow:var(--shadow); }
+    .upload-label { font-size:14px; font-weight:500; color:var(--text); margin-bottom:2px; }
+    .upload-hint { font-family:'Space Mono',monospace; font-size:9px; color:var(--text-4); letter-spacing:0.06em; }
+    .hidden-input { display:none; }
+
+    /* ALERTS */
+    .alert { border-radius:var(--r-sm); padding:13px 16px; margin-bottom:20px; font-size:13px; line-height:1.6; }
+    .alert-info { background:var(--surface); color:var(--text-2); border-left:3px solid var(--gold); box-shadow:var(--shadow); }
+    .alert-success { background:var(--success-bg); color:var(--success); border-left:3px solid var(--success); }
+    .alert-error { background:var(--danger-bg); color:var(--danger); border-left:3px solid var(--danger); }
+
+    .sec-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; color:var(--text-4); margin-bottom:12px; }
+
+    /* AGENT / SIGNAL GRID */
+    .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:20px; }
+    .tile { background:var(--surface); border-radius:var(--r); padding:18px; cursor:pointer; transition:all 0.12s; text-align:left; width:100%; box-shadow:var(--shadow); }
+    .tile:hover { box-shadow:var(--shadow-lg); transform:translateY(-1px); }
+    .tile i { font-size:22px; color:var(--gold); margin-bottom:10px; display:block; }
+    .tile-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+    .tile-desc { font-family:'Space Mono',monospace; font-size:9px; color:var(--text-4); line-height:1.5; letter-spacing:0.03em; }
+
+    /* OUTPUT */
+    .output-box { background:var(--surface); border-radius:var(--r); padding:22px; margin-top:14px; font-size:13px; line-height:1.8; color:var(--text-2); box-shadow:var(--shadow); }
+    .output-box strong { color:var(--text); }
+    .output-line-gold { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.2em; color:var(--gold); margin:14px 0 6px; display:block; }
+    .output-bullet { padding:3px 0 3px 12px; border-left:2px solid var(--border-strong); margin:3px 0; color:var(--text-2); }
+
+    /* SPINNER */
+    .spinner { display:inline-block; width:13px; height:13px; border:2px solid var(--border-strong); border-top-color:var(--gold); border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:7px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* MATCH CARDS */
+    .match-card { background:var(--surface); border-radius:var(--r); padding:20px; margin-bottom:12px; box-shadow:var(--shadow); }
+    .match-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+    .match-name { font-family:'Spectral',serif; font-size:18px; font-weight:500; color:var(--text); }
+    .score-pill { font-family:'Spectral',serif; font-size:22px; font-weight:500; padding:5px 16px; border-radius:var(--r-sm); }
+    .score-high { background:var(--success-bg); color:var(--success); }
+    .score-mid { background:var(--warning-bg); color:var(--warning); }
+    .score-low { background:var(--surface2); color:var(--text-4); }
+    .dim-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+    .dim { background:var(--surface2); border-radius:var(--r-sm); padding:10px; text-align:center; }
+    .dim-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:0.1em; color:var(--text-4); margin-bottom:4px; }
+    .dim-val { font-family:'Spectral',serif; font-size:20px; font-weight:500; color:var(--text); }
+    .match-reason { font-size:13px; color:var(--text-2); line-height:1.6; margin-bottom:10px; }
+    .match-edge { font-family:'Space Mono',monospace; font-size:10px; color:var(--success); margin-bottom:3px; }
+    .match-risk { font-family:'Space Mono',monospace; font-size:10px; color:var(--danger); }
+
+    .stage-sel { flex:0; min-width:110px; padding:6px 9px; font-size:12px; }
+
+    /* DOC ZONE */
+    .doc-zone { background:var(--surface); border-radius:var(--r); padding:20px; margin-bottom:14px; box-shadow:var(--shadow); }
+    .doc-zone-title { font-family:'Spectral',serif; font-size:16px; font-weight:500; color:var(--text); margin-bottom:2px; }
+    .doc-zone-hint { font-family:'Space Mono',monospace; font-size:9px; color:var(--text-4); margin-bottom:14px; letter-spacing:0.06em; }
+    .doc-upload-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .doc-up-btn { background:var(--surface2); border:1px dashed var(--border-strong); border-radius:var(--r-sm); padding:9px 14px; cursor:pointer; font-size:12px; color:var(--text-2); transition:all 0.12s; font-family:'Space Grotesk',sans-serif; }
+    .doc-up-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .doc-up-btn.loaded { border-style:solid; border-color:var(--success); color:var(--success); background:var(--success-bg); }
+
+    .run-all-btn { background:var(--navy); border:none; border-radius:var(--r-sm); padding:11px 24px; font-family:'Space Grotesk',sans-serif; font-size:14px; font-weight:600; color:#fff; cursor:pointer; transition:background 0.12s; display:inline-flex; align-items:center; gap:8px; }
+    .run-all-btn i { font-size:16px; color:var(--gold); }
+    .run-all-btn:hover { background:var(--navy-mid); }
+    .run-all-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+    .empty { font-family:'Space Mono',monospace; font-size:10px; color:var(--text-4); padding:28px; text-align:center; letter-spacing:0.1em; }
+    .grid-2 { display:grid; grid-template-columns:1.4fr 1fr; gap:14px; }
+    @media (max-width:760px){ .grid-2 { grid-template-columns:1fr; } .main { padding:24px; } }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div>
-        <div class="logo">Romaris Partners</div>
-        <div class="tagline">Precision executive search · Australia to APAC</div>
-      </div>
-      <div class="sync" id="sync-status">Connecting...</div>
-    </div>
+<div class="layout">
 
-    <div class="nav">
-      <button class="nav-btn active" onclick="switchTab('dashboard', this)">Dashboard</button>
-      <button class="nav-btn" onclick="switchTab('vendors', this)">Vendors</button>
-      <button class="nav-btn" onclick="switchTab('candidates', this)">Candidates</button>
-      <button class="nav-btn" onclick="switchTab('match', this)">Match</button>
-      <button class="nav-btn" onclick="switchTab('pipeline', this)">Pipeline</button>
-      <button class="nav-btn" onclick="switchTab('agents', this)">Agents</button>
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="logo-mark"><span></span><span></span><span></span><span></span></div>
+      <div class="logo-wordmark">ROMARIS</div>
+      <div class="logo-sub">PARTNERS</div>
     </div>
+    <nav class="sb-nav">
+      <div class="sb-section">OPERATIONS</div>
+      <button class="sb-btn active" onclick="switchTab('dashboard',this)"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
+      <button class="sb-btn" onclick="switchTab('signals',this)"><i class="ti ti-radar"></i>Signals</button>
+      <button class="sb-btn" onclick="switchTab('vendors',this)"><i class="ti ti-building"></i>Vendors</button>
+      <button class="sb-btn" onclick="switchTab('candidates',this)"><i class="ti ti-users"></i>Candidates</button>
+      <button class="sb-btn" onclick="switchTab('match',this)"><i class="ti ti-target"></i>Match Engine</button>
+      <button class="sb-btn" onclick="switchTab('pipeline',this)"><i class="ti ti-chart-funnel"></i>Pipeline</button>
+      <div class="sb-section">INTELLIGENCE</div>
+      <button class="sb-btn" onclick="switchTab('shortlist',this)"><i class="ti ti-file-text"></i>Shortlist Doc</button>
+      <button class="sb-btn" onclick="switchTab('agents',this)"><i class="ti ti-robot"></i>Agents</button>
+    </nav>
+    <div class="sb-footer">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span class="sync-label" id="sync-text">Connecting...</span>
+    </div>
+  </aside>
 
+  <main class="main">
+
+    <!-- DASHBOARD -->
     <div id="dashboard" class="tab active">
-      <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Vendors</div><div class="stat-value" id="d-vendors">0</div></div>
-        <div class="stat-card"><div class="stat-label">Candidates</div><div class="stat-value" id="d-candidates">0</div></div>
-        <div class="stat-card"><div class="stat-label">In Pipeline</div><div class="stat-value" id="d-pipeline">0</div></div>
-        <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="d-placed">0</div></div>
+      <div class="pg-head">
+        <div>
+          <div class="pg-title" id="greeting">Welcome back</div>
+          <div class="pg-sub" id="today-date"></div>
+        </div>
+        <button class="btn btn-navy btn-xl" onclick="switchTab('signals',document.querySelectorAll('.sb-btn')[1])"><i class="ti ti-radar"></i>Run morning signals</button>
       </div>
-      <div class="alert">Upload CVs and job descriptions — the AI reads them in full. Then go to <strong>Match</strong> to score every candidate against a role across experience, education, achievements, and fit.</div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
-        <button class="btn btn-primary" onclick="switchTab('vendors', document.querySelectorAll('.nav-btn')[1])">+ Vendor / Job Desc</button>
-        <button class="btn btn-primary" onclick="switchTab('candidates', document.querySelectorAll('.nav-btn')[2])">+ Candidate / CV</button>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">VENDORS</span><i class="ti ti-building"></i></div><div class="stat-num" id="d-vendors">0</div><div class="stat-delta" id="d-vendors-delta">Client companies</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">CANDIDATES</span><i class="ti ti-users"></i></div><div class="stat-num" id="d-candidates">0</div><div class="stat-delta" id="d-candidates-delta">In talent pool</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">IN PIPELINE</span><i class="ti ti-chart-funnel"></i></div><div class="stat-num" id="d-pipeline">0</div><div class="stat-delta" id="d-pipeline-delta">Active deals</div></div>
+        <div class="stat-card dark"><div class="stat-top"><span class="stat-label">PLACED · FEES</span><i class="ti ti-trophy"></i></div><div class="stat-num" id="d-fees">$0</div><div class="stat-delta" id="d-placed-delta">0 placements</div></div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px;">
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">Today's priorities</span><span class="panel-link" onclick="switchTab('pipeline',document.querySelectorAll('.sb-btn')[5])">View pipeline</span></div>
+          <div id="priorities-list"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><span class="panel-title">Pipeline health</span></div>
+          <div id="pipeline-bars"></div>
+        </div>
       </div>
     </div>
 
+    <!-- SIGNALS -->
+    <div id="signals" class="tab">
+      <div class="pg-head"><div><div class="pg-title">Hiring Signals</div><div class="pg-sub">Perth · live web intelligence · 6 signal types</div></div></div>
+      <div style="display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap;">
+        <button class="run-all-btn" onclick="runAllSignals(this)"><i class="ti ti-radar"></i>Run All Signals</button>
+        <span style="font-family:'Space Mono',monospace; font-size:10px; color:var(--text-4);" id="signals-last-run"></span>
+      </div>
+      <div class="card-grid">
+        <button class="tile" onclick="runSignal('job_ads')"><i class="ti ti-clipboard-list"></i><div class="tile-title">Job Ads Posted</div><div class="tile-desc">COMPANIES HIRING BD/SALES IN PERTH NOW</div></button>
+        <button class="tile" onclick="runSignal('funding')"><i class="ti ti-cash"></i><div class="tile-title">Recent Funding</div><div class="tile-desc">WA COMPANIES THAT JUST RAISED CAPITAL</div></button>
+        <button class="tile" onclick="runSignal('contracts')"><i class="ti ti-file-certificate"></i><div class="tile-title">New Contracts Won</div><div class="tile-desc">ASX + AUSTENDER AWARDS IN WA</div></button>
+        <button class="tile" onclick="runSignal('headcount')"><i class="ti ti-trending-up"></i><div class="tile-title">Growing Headcount</div><div class="tile-desc">PERTH VENDORS IN EXPANSION MODE</div></button>
+        <button class="tile" onclick="runSignal('departures')"><i class="ti ti-door-exit"></i><div class="tile-title">BD Leaders Left</div><div class="tile-desc">SENIOR COMMERCIAL VACANCIES JUST OPENED</div></button>
+        <button class="tile" onclick="runSignal('expansion')"><i class="ti ti-world"></i><div class="tile-title">Market Expansion</div><div class="tile-desc">COMPANIES MOVING INTO WA NEEDING BD TALENT</div></button>
+      </div>
+      <div id="signals-output"></div>
+    </div>
+
+    <!-- VENDORS -->
     <div id="vendors" class="tab">
-      <div class="section-title">Vendors & Roles</div>
+      <div class="pg-head"><div><div class="pg-title">Vendors</div><div class="pg-sub">Client companies · open requirements</div></div></div>
       <div class="upload-zone">
-        <div>
-          <div class="label">Upload a job description (PDF)</div>
-          <div class="hint">AI reads the full JD and stores complete requirements for precise matching</div>
-        </div>
-        <button class="btn btn-primary" onclick="document.getElementById('jd-file').click()">Upload Job Description</button>
+        <div><div class="upload-label">Upload a job description (PDF)</div><div class="upload-hint">AI READS FULL JD · EXTRACTS COMPANY, ROLE, REQUIREMENTS · STORED FOR MATCHING</div></div>
+        <button class="btn btn-primary" onclick="document.getElementById('jd-file').click()"><i class="ti ti-upload"></i>Upload JD</button>
         <input type="file" id="jd-file" class="hidden-input" accept="application/pdf,image/*" onchange="analyzeJD(this)">
       </div>
       <div id="jd-status"></div>
-      <div class="input-group">
+      <div class="input-row">
         <input type="text" id="v-name" placeholder="Company name">
         <input type="text" id="v-industry" placeholder="Industry">
         <input type="text" id="v-location" placeholder="Location">
-        <input type="text" id="v-role" placeholder="Role they need">
+        <input type="text" id="v-role" placeholder="Role needed">
         <button class="btn btn-primary" onclick="addVendor()">Add</button>
       </div>
       <div id="vendor-list"></div>
     </div>
 
+    <!-- CANDIDATES -->
     <div id="candidates" class="tab">
-      <div class="section-title">Candidates</div>
+      <div class="pg-head"><div><div class="pg-title">Candidates</div><div class="pg-sub">Talent pool · full AI profile analysis</div></div></div>
       <div class="upload-zone">
-        <div>
-          <div class="label">Upload CVs (PDF) — select multiple at once</div>
-          <div class="hint">AI reads each full CV — experience, education, achievements — and stores it for scoring</div>
-        </div>
-        <button class="btn btn-primary" onclick="document.getElementById('cv-file').click()">Upload CVs</button>
+        <div><div class="upload-label">Upload CVs (PDF) — select multiple at once</div><div class="upload-hint">AI READS EACH CV IN FULL · EXPERIENCE · EDUCATION · ACHIEVEMENTS · STORED FOR MATCHING</div></div>
+        <button class="btn btn-primary" onclick="document.getElementById('cv-file').click()"><i class="ti ti-upload"></i>Upload CVs</button>
         <input type="file" id="cv-file" class="hidden-input" accept="application/pdf,image/*" multiple onchange="analyzeCV(this)">
       </div>
       <div id="cv-status"></div>
-      <div class="input-group">
+      <div class="input-row">
         <input type="text" id="c-name" placeholder="Name">
         <input type="text" id="c-role" placeholder="Current role">
         <input type="number" id="c-years" placeholder="Years">
@@ -152,265 +324,501 @@
       <div id="candidate-list"></div>
     </div>
 
+    <!-- MATCH -->
     <div id="match" class="tab">
-      <div class="section-title">Precision Match Engine</div>
-      <div class="alert">Pick a role. The AI scores every candidate against it across experience, education, achievements, trajectory, and fit — then ranks them best to worst with reasoning.</div>
-      <div class="input-group">
+      <div class="pg-head"><div><div class="pg-title">Match Engine</div><div class="pg-sub">Precision scoring · experience · education · achievements · fit</div></div></div>
+      <div class="alert alert-info">Select a role. AI scores every candidate across 4 dimensions, ranks them best to worst, with edge and risk per candidate.</div>
+      <div class="input-row">
         <select id="match-role" style="flex:1;"></select>
-        <button class="btn btn-primary" onclick="runMatch()">Score Candidates</button>
+        <button class="btn btn-primary" onclick="runMatch()"><i class="ti ti-target"></i>Score All</button>
       </div>
       <div id="match-output"></div>
     </div>
 
+    <!-- PIPELINE -->
     <div id="pipeline" class="tab">
-      <div class="section-title">Pipeline & Placements</div>
+      <div class="pg-head"><div><div class="pg-title">Pipeline</div><div class="pg-sub">Deal stages · fee tracking · placements</div></div></div>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Sourced</div><div class="stat-value" id="p-sourced">0</div></div>
-        <div class="stat-card"><div class="stat-label">Interview</div><div class="stat-value" id="p-interview">0</div></div>
-        <div class="stat-card"><div class="stat-label">Offer</div><div class="stat-value" id="p-offer">0</div></div>
-        <div class="stat-card"><div class="stat-label">Placed</div><div class="stat-value" id="p-placed">0</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">SOURCED</span><i class="ti ti-user-plus"></i></div><div class="stat-num" id="p-sourced">0</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">INTERVIEW</span><i class="ti ti-message-circle"></i></div><div class="stat-num" id="p-interview">0</div></div>
+        <div class="stat-card"><div class="stat-top"><span class="stat-label">OFFER</span><i class="ti ti-mail"></i></div><div class="stat-num" id="p-offer">0</div></div>
+        <div class="stat-card dark"><div class="stat-top"><span class="stat-label">PLACED</span><i class="ti ti-trophy"></i></div><div class="stat-num" id="p-placed">0</div></div>
       </div>
-      <div class="alert">Move candidates through stages. Placed deals auto-calculate your 20% fee.</div>
+      <div class="alert alert-info">Move candidates through stages. Placed deals auto-calculate your 20% fee.</div>
       <div id="pipeline-list"></div>
     </div>
 
+    <!-- SHORTLIST -->
+    <div id="shortlist" class="tab">
+      <div class="pg-head"><div><div class="pg-title">Shortlist Document</div><div class="pg-sub">Branded client presentation · Romaris Partners</div></div></div>
+      <div class="alert alert-info">Upload position brief + candidate CVs + your notes. AI generates a polished Romaris Partners shortlist ready to send to the client.</div>
+      <div class="doc-zone">
+        <div class="doc-zone-title">Position Brief</div>
+        <div class="doc-zone-hint">JOB DESCRIPTION OR POSITION BRIEF FROM THE CLIENT</div>
+        <div class="doc-upload-row">
+          <button class="doc-up-btn" id="brief-btn" onclick="document.getElementById('brief-file').click()">+ Upload Position Brief (PDF)</button>
+          <input type="file" id="brief-file" class="hidden-input" accept="application/pdf,image/*" onchange="loadDocFile(this,'brief-btn','briefData')">
+        </div>
+      </div>
+      <div class="doc-zone">
+        <div class="doc-zone-title">Candidate CVs</div>
+        <div class="doc-zone-hint">UPLOAD 1–3 CANDIDATE CVS TO SHORTLIST</div>
+        <div class="doc-upload-row">
+          <button class="doc-up-btn" id="cv1-btn" onclick="document.getElementById('cv1-file').click()">+ Candidate 1 CV</button>
+          <input type="file" id="cv1-file" class="hidden-input" accept="application/pdf,image/*" onchange="loadDocFile(this,'cv1-btn','cv1Data')">
+          <button class="doc-up-btn" id="cv2-btn" onclick="document.getElementById('cv2-file').click()">+ Candidate 2 CV</button>
+          <input type="file" id="cv2-file" class="hidden-input" accept="application/pdf,image/*" onchange="loadDocFile(this,'cv2-btn','cv2Data')">
+          <button class="doc-up-btn" id="cv3-btn" onclick="document.getElementById('cv3-file').click()">+ Candidate 3 CV</button>
+          <input type="file" id="cv3-file" class="hidden-input" accept="application/pdf,image/*" onchange="loadDocFile(this,'cv3-btn','cv3Data')">
+        </div>
+      </div>
+      <div class="doc-zone">
+        <div class="doc-zone-title">Your Notes</div>
+        <div class="doc-zone-hint">OPTIONAL · CALL NOTES, OBSERVATIONS, CONTEXT FOR THE CLIENT</div>
+        <textarea id="doc-notes" placeholder="e.g. Candidate 1 available immediately. Candidate 2 open to relocation from Sydney..." rows="4" style="width:100%; margin-top:8px;"></textarea>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; margin-top:6px;">
+        <button class="btn btn-navy btn-xl" onclick="generateShortlist()"><i class="ti ti-file-text"></i>Generate Document</button>
+        <span style="font-family:'Space Mono',monospace; font-size:10px; color:var(--text-4);">Branded HTML · print as PDF</span>
+      </div>
+      <div id="shortlist-output"></div>
+    </div>
+
+    <!-- AGENTS -->
     <div id="agents" class="tab">
-      <div class="section-title">AI Agents</div>
-      <p style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">Agents run live on Claude, working on your database plus live web research.</p>
-      <div class="agent-grid">
-        <button class="agent-btn" onclick="runAgent('vendor_research')"><div class="agent-title">Vendor Research</div><div class="agent-desc">Find Australia vendors hiring senior sales/BD</div></button>
-        <button class="agent-btn" onclick="runAgent('candidate_sourcing')"><div class="agent-title">Candidate Sourcing</div><div class="agent-desc">LinkedIn sourcing strategy + Boolean strings</div></button>
-        <button class="agent-btn" onclick="runAgent('outreach')"><div class="agent-title">Outreach Agent</div><div class="agent-desc">Draft messages for your candidates</div></button>
-        <button class="agent-btn" onclick="runAgent('pipeline_intelligence')"><div class="agent-title">Pipeline Intelligence</div><div class="agent-desc">Analyze pipeline, flag bottlenecks</div></button>
-        <button class="agent-btn" onclick="runAgent('quality')"><div class="agent-title">Quality Agent</div><div class="agent-desc">Placement quality framework</div></button>
+      <div class="pg-head"><div><div class="pg-title">Agents</div><div class="pg-sub">Autonomous · live web research · writes to database</div></div></div>
+      <div class="alert alert-info">Vendor Research auto-adds companies to your database. All agents use live web search where relevant. Outreach drafts are yours to send.</div>
+      <div class="card-grid">
+        <button class="tile" onclick="runAgent('vendor_research')"><i class="ti ti-building-store"></i><div class="tile-title">Vendor Research</div><div class="tile-desc">FINDS PERTH VENDORS · AUTO-ADDS TO DATABASE</div></button>
+        <button class="tile" onclick="runAgent('candidate_sourcing')"><i class="ti ti-user-search"></i><div class="tile-title">Candidate Sourcing</div><div class="tile-desc">LINKEDIN STRATEGY · BOOLEAN STRINGS</div></button>
+        <button class="tile" onclick="runAgent('outreach')"><i class="ti ti-message"></i><div class="tile-title">Outreach Drafter</div><div class="tile-desc">DRAFT MESSAGES · YOU SEND MANUALLY</div></button>
+        <button class="tile" onclick="runAgent('pipeline_intelligence')"><i class="ti ti-chart-dots"></i><div class="tile-title">Pipeline Intelligence</div><div class="tile-desc">LIVE ANALYSIS · BOTTLENECKS · FEES</div></button>
+        <button class="tile" onclick="runAgent('quality')"><i class="ti ti-shield-check"></i><div class="tile-title">Quality Advisor</div><div class="tile-desc">PLACEMENT QUALITY · RETENTION FRAMEWORK</div></button>
       </div>
       <div id="agent-output"></div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://efintqfbpaquoojgudfg.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmaW50cWZicGFxdW9vamd1ZGZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODQ2MDEsImV4cCI6MjA5NjQ2MDYwMX0.ruSjJoIvra73-Tvq5c3BALjNa4sF1i3RArodxYoagZU';
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL='https://efintqfbpaquoojgudfg.supabase.co';
+  const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVmaW50cWZicGFxdW9vamd1ZGZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4ODQ2MDEsImV4cCI6MjA5NjQ2MDYwMX0.ruSjJoIvra73-Tvq5c3BALjNa4sF1i3RArodxYoagZU';
+  const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  let vendors=[],candidates=[],pipeline=[];
+  let briefData=null,cv1Data=null,cv2Data=null,cv3Data=null;
 
-    let vendors = [], candidates = [], pipeline = [];
+  function setSync(ok,txt){
+    document.getElementById('sync-dot').className='sync-dot'+(ok?' ok':'');
+    document.getElementById('sync-text').textContent=txt;
+  }
 
-    function setSync(text, ok) { const el = document.getElementById('sync-status'); el.textContent = text; el.className = 'sync' + (ok ? ' ok' : ''); }
+  async function loadAll(){
+    setSync(false,'Syncing...');
+    try{
+      const[v,c,p]=await Promise.all([
+        sb.from('vendors').select('*').order('created_at',{ascending:false}),
+        sb.from('candidates').select('*').order('created_at',{ascending:false}),
+        sb.from('pipeline').select('*').order('created_at',{ascending:false}),
+      ]);
+      vendors=v.data||[];candidates=c.data||[];pipeline=p.data||[];
+      setSync(true,'Synced');render();
+    }catch(e){setSync(false,'Error');}
+  }
 
-    async function loadAll() {
-      setSync('Syncing...', false);
-      try {
-        const [v, c, p] = await Promise.all([
-          sb.from('vendors').select('*').order('created_at', { ascending: false }),
-          sb.from('candidates').select('*').order('created_at', { ascending: false }),
-          sb.from('pipeline').select('*').order('created_at', { ascending: false }),
-        ]);
-        vendors = v.data || []; candidates = c.data || []; pipeline = p.data || [];
-        setSync('Synced ✓', true); render();
-      } catch (e) { setSync('Sync error', false); }
+  function switchTab(tab,btn){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    if(btn)btn.classList.add('active');
+    render();
+  }
+
+  function fileToBase64(file){
+    return new Promise((res,rej)=>{
+      const r=new FileReader();
+      r.onload=()=>res(r.result.split(',')[1]);
+      r.onerror=rej;
+      r.readAsDataURL(file);
+    });
+  }
+
+  async function callClaude(payload){
+    const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    return data.text;
+  }
+
+  function parseJSON(text){
+    const clean=text.replace(/```json/g,'').replace(/```/g,'').trim();
+    const s=clean.indexOf('{'),e=clean.lastIndexOf('}');
+    return JSON.parse(clean.substring(s,e+1));
+  }
+
+  async function loadDocFile(input,btnId,varName){
+    const file=input.files[0];if(!file)return;
+    const base64=await fileToBase64(file);
+    window[varName]={base64,mediaType:file.type,name:file.name};
+    const btn=document.getElementById(btnId);
+    btn.textContent='✓ '+file.name.substring(0,22)+(file.name.length>22?'...':'');
+    btn.classList.add('loaded');
+  }
+
+  async function analyzeCV(input){
+    const files=Array.from(input.files);if(!files.length)return;
+    const status=document.getElementById('cv-status');
+    const prompt=`Analyze this CV/resume in full. Return ONLY a JSON object, no other text:
+{"name":"","role":"current job title","years":"total years experience number only","location":"city country","salary":"expected salary thousands number only","skills":"top 6 skills comma separated","full_profile":"150-word professional summary: career trajectory key achievements with numbers education qualifications industry depth standout strengths. Specific and factual."}
+Unknown fields = empty string.`;
+    let done=0,failed=0;
+    for(let i=0;i<files.length;i++){
+      status.innerHTML=`<div class="alert alert-info"><span class="spinner"></span>Processing CV ${i+1} of ${files.length}... (${done} added${failed?', '+failed+' failed':''})</div>`;
+      try{
+        const base64=await fileToBase64(files[i]);
+        const text=await callClaude({prompt,document:base64,mediaType:files[i].type});
+        const p=parseJSON(text);
+        const id=Date.now()+i;
+        // Upload original CV file to storage
+        let cv_path='';
+        try{
+          const ext=files[i].name.split('.').pop()||'pdf';
+          const path=id+'_'+files[i].name.replace(/[^a-zA-Z0-9._-]/g,'_');
+          const up=await sb.storage.from('cvs').upload(path,files[i],{contentType:files[i].type,upsert:true});
+          if(!up.error){ cv_path=sb.storage.from('cvs').getPublicUrl(path).data.publicUrl; }
+        }catch(e){}
+        const cand={id,name:p.name||files[i].name,role:p.role||'',years:String(p.years||''),location:p.location||'',salary:String(p.salary||''),skills:p.skills||'',full_profile:p.full_profile||'',cv_path,stage:'sourced'};
+        await sb.from('candidates').insert(cand);
+        await sb.from('pipeline').insert({id,name:cand.name,salary:cand.salary,stage:'sourced'});
+        done++;
+      }catch(e){failed++;}
     }
+    status.innerHTML=`<div class="alert alert-success">✓ Done. ${done} candidate${done!==1?'s':''} added${failed?', '+failed+' failed':''}.</div>`;
+    input.value='';loadAll();
+  }
 
-    function switchTab(tab, btn) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      if (btn) btn.classList.add('active'); render();
-    }
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function callClaude(payload) {
-      const res = await fetch('/api/claude', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      const data = await res.json();
-      if (data.error) throw new Error(data.error);
-      return data.text;
-    }
-
-    function parseJSON(text) {
-      const clean = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
-      return JSON.parse(clean.substring(start, end + 1));
-    }
-
-    async function analyzeCV(input) {
-      const files = Array.from(input.files); if (files.length === 0) return;
-      const status = document.getElementById('cv-status');
-      const prompt = `Analyze this CV/resume in full. Return ONLY a JSON object, no other text, with these exact keys:
-{"name":"","role":"current job title","years":"total years experience, number only","location":"city, country","salary":"current or expected salary in thousands, number only","skills":"comma-separated top 6 skills","full_profile":"a detailed 150-word professional summary covering: career trajectory, key achievements with numbers (revenue, deals, team size), education and qualifications, industry depth, and standout strengths. Be specific and factual from the CV."}
-If a field is unknown, use empty string.`;
-
-      let done = 0, failed = 0;
-      for (let i = 0; i < files.length; i++) {
-        status.innerHTML = '<div class="alert"><span class="spinner"></span>Processing CV ' + (i+1) + ' of ' + files.length + '... (' + done + ' added' + (failed?', '+failed+' failed':'') + ')</div>';
-        try {
-          const base64 = await fileToBase64(files[i]);
-          const text = await callClaude({ prompt, document: base64, mediaType: files[i].type });
-          const p = parseJSON(text);
-          const id = Date.now() + i;
-          const cand = { id, name: p.name || files[i].name, role: p.role || '', years: String(p.years || ''), location: p.location || '', salary: String(p.salary || ''), skills: p.skills || '', full_profile: p.full_profile || '', stage: 'sourced' };
-          await sb.from('candidates').insert(cand);
-          await sb.from('pipeline').insert({ id, name: cand.name, salary: cand.salary, stage: 'sourced' });
-          done++;
-        } catch (e) { failed++; }
-      }
-      status.innerHTML = '<div class="alert" style="border-left-color:#86efac; color:#86efac;">✓ Done. ' + done + ' candidate' + (done!==1?'s':'') + ' added' + (failed ? ', ' + failed + ' failed (try those individually)' : '') + '.</div>';
-      input.value = ''; loadAll();
-    }
-
-    async function analyzeJD(input) {
-      const file = input.files[0]; if (!file) return;
-      const status = document.getElementById('jd-status');
-      status.innerHTML = '<div class="alert"><span class="spinner"></span>Reading full job description...</div>';
-      try {
-        const base64 = await fileToBase64(file);
-        const prompt = `Analyze this job description in full. Return ONLY a JSON object, no other text, with these exact keys:
-{"name":"hiring company name","industry":"","location":"city, country","role":"the role title","full_jd":"a detailed 150-word summary of requirements: must-have experience and years, required skills, education/qualifications, seniority level, key responsibilities, salary range if stated, and what an ideal candidate looks like. Be specific from the JD."}
-If a field is unknown, use empty string.`;
-        const text = await callClaude({ prompt, document: base64, mediaType: file.type });
-        const v = parseJSON(text);
-        const row = { id: Date.now(), name: v.name || 'Unnamed company', industry: v.industry || '', location: v.location || '', role: v.role || '', full_jd: v.full_jd || '' };
-        await sb.from('vendors').insert(row);
-        status.innerHTML = '<div class="alert" style="border-left-color:#86efac; color:#86efac;">✓ Added role at ' + row.name + ' — ' + (row.role || 'role n/a') + '. Full requirements stored.</div>';
-        input.value = ''; loadAll();
-      } catch (e) { status.innerHTML = '<div class="alert" style="border-left-color:#f87171; color:#fca5a5;">Error: ' + e.message + '</div>'; }
-    }
-
-    async function runMatch() {
-      const roleId = document.getElementById('match-role').value;
-      const out = document.getElementById('match-output');
-      if (!roleId) { out.innerHTML = '<div class="alert">Add a vendor role first (upload a JD or add manually).</div>'; return; }
-      if (candidates.length === 0) { out.innerHTML = '<div class="alert">Add candidates first (upload CVs or add manually).</div>'; return; }
-      const role = vendors.find(v => String(v.id) === String(roleId));
-      out.innerHTML = '<div class="agent-output"><span class="spinner"></span>Scoring every candidate against this role across all dimensions...</div>';
-
-      const roleText = `Company: ${role.name}. Industry: ${role.industry}. Location: ${role.location}. Role: ${role.role}. Full requirements: ${role.full_jd || 'Not provided — infer from role title.'}`;
-      const candText = candidates.map(c => `ID ${c.id} | ${c.name} | ${c.role} | ${c.years} yrs | ${c.location} | $${c.salary}k | Skills: ${c.skills} | Profile: ${c.full_profile || 'limited data'}`).join('\n');
-
-      const prompt = `You are an expert executive recruiter scoring candidates for a role. Be precise and critical — only the genuinely best should score high.
-
-ROLE:
-${roleText}
-
-CANDIDATES:
-${candText}
-
-Score each candidate 0-100 overall, plus sub-scores 0-100 for: experience (depth + relevance), education (qualifications), achievements (measurable results), fit (location, salary, industry alignment). Rank best to worst.
-
-Return ONLY a JSON object, no other text:
-{"matches":[{"id":candidate_id,"name":"","overall":0,"experience":0,"education":0,"achievements":0,"fit":0,"reason":"2 sentences on why this score","edge":"their single biggest advantage","risk":"the main concern or gap"}]}
-Order the matches array from highest overall to lowest.`;
-
-      try {
-        const text = await callClaude({ prompt });
-        const result = parseJSON(text);
-        const matches = (result.matches || []).sort((a,b) => b.overall - a.overall);
-        out.innerHTML = '<div style="margin-bottom:12px; color:#94a3b8; font-size:13px;">Ranked for: <strong style="color:white;">' + role.name + ' — ' + role.role + '</strong></div>' +
-          matches.map(m => {
-            const cls = m.overall >= 80 ? 'score-high' : m.overall >= 60 ? 'score-mid' : 'score-low';
-            return `<div class="match-card">
-              <div class="match-head">
-                <div class="match-name">${m.name}</div>
-                <div class="score-pill ${cls}">${m.overall}</div>
-              </div>
-              <div class="dim-grid">
-                <div class="dim"><div class="dim-label">Experience</div><div class="dim-val">${m.experience}</div></div>
-                <div class="dim"><div class="dim-label">Education</div><div class="dim-val">${m.education}</div></div>
-                <div class="dim"><div class="dim-label">Achievements</div><div class="dim-val">${m.achievements}</div></div>
-                <div class="dim"><div class="dim-label">Fit</div><div class="dim-val">${m.fit}</div></div>
-              </div>
-              <div class="match-reason">${m.reason}</div>
-              <div class="match-flag flag-edge">▲ Edge: ${m.edge}</div>
-              <div class="match-flag flag-risk">▼ Risk: ${m.risk}</div>
-            </div>`;
-          }).join('');
-      } catch (e) {
-        out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + e.message + '</div>';
-      }
-    }
-
-    async function addVendor() {
-      const name = document.getElementById('v-name').value.trim(); if (!name) return;
-      const row = { id: Date.now(), name, industry: document.getElementById('v-industry').value.trim(), location: document.getElementById('v-location').value.trim(), role: document.getElementById('v-role').value.trim(), full_jd: '' };
+  async function analyzeJD(input){
+    const file=input.files[0];if(!file)return;
+    const status=document.getElementById('jd-status');
+    status.innerHTML='<div class="alert alert-info"><span class="spinner"></span>Reading job description...</div>';
+    try{
+      const base64=await fileToBase64(file);
+      const prompt=`Analyze this job description in full. Return ONLY a JSON object:
+{"name":"hiring company name","industry":"","location":"city country","role":"role title","full_jd":"150-word summary: must-have experience years required skills education seniority responsibilities salary range ideal candidate profile."}
+Unknown = empty string.`;
+      const text=await callClaude({prompt,document:base64,mediaType:file.type});
+      const v=parseJSON(text);
+      const row={id:Date.now(),name:v.name||'Unnamed',industry:v.industry||'',location:v.location||'',role:v.role||'',full_jd:v.full_jd||''};
       await sb.from('vendors').insert(row);
-      ['v-name','v-industry','v-location','v-role'].forEach(id => document.getElementById(id).value = '');
-      loadAll();
-    }
+      status.innerHTML=`<div class="alert alert-success">✓ Added ${row.name} — ${row.role||'role n/a'}.</div>`;
+      input.value='';loadAll();
+    }catch(e){status.innerHTML=`<div class="alert alert-error">Error: ${e.message}</div>`;}
+  }
 
-    async function addCandidate() {
-      const name = document.getElementById('c-name').value.trim(); if (!name) return;
-      const id = Date.now();
-      const cand = { id, name, role: document.getElementById('c-role').value.trim(), years: document.getElementById('c-years').value.trim(), location: document.getElementById('c-location').value.trim(), salary: document.getElementById('c-salary').value.trim(), skills: '', full_profile: '', stage: 'sourced' };
-      await sb.from('candidates').insert(cand);
-      await sb.from('pipeline').insert({ id, name: cand.name, salary: cand.salary, stage: 'sourced' });
-      ['c-name','c-role','c-years','c-location','c-salary'].forEach(id => document.getElementById(id).value = '');
-      loadAll();
-    }
+  async function runMatch(){
+    const roleId=document.getElementById('match-role').value;
+    const out=document.getElementById('match-output');
+    if(!roleId||!candidates.length){out.innerHTML='<div class="alert alert-info">Add vendors and candidates first.</div>';return;}
+    const role=vendors.find(v=>String(v.id)===String(roleId));
+    out.innerHTML='<div class="output-box"><span class="spinner"></span>Scoring every candidate...</div>';
+    const roleText=`Company: ${role.name}. Industry: ${role.industry}. Location: ${role.location}. Role: ${role.role}. Requirements: ${role.full_jd||'Infer from role title.'}`;
+    const candText=candidates.map(c=>`ID ${c.id}|${c.name}|${c.role}|${c.years}yrs|${c.location}|$${c.salary}k|Skills:${c.skills}|Profile:${c.full_profile||'limited data'}`).join('\n');
+    const prompt=`You are an expert executive recruiter. Score these candidates for this role precisely. Only genuinely strong candidates score high.
 
-    async function deleteVendor(id) { await sb.from('vendors').delete().eq('id', id); loadAll(); }
-    async function deleteCandidate(id) { await sb.from('candidates').delete().eq('id', id); await sb.from('pipeline').delete().eq('id', id); loadAll(); }
-    async function updateStage(id, stage) { await sb.from('pipeline').update({ stage }).eq('id', id); await sb.from('candidates').update({ stage }).eq('id', id); loadAll(); }
+ROLE: ${roleText}
+CANDIDATES:\n${candText}
 
-    async function runAgent(type) {
-      const out = document.getElementById('agent-output');
-      out.innerHTML = '<div class="agent-output"><span class="spinner"></span>Running agent...</div>';
-      const vendorData = JSON.stringify(vendors.map(v => ({name:v.name, role:v.role, location:v.location})));
-      const candidateData = JSON.stringify(candidates.map(c => ({name:c.name, role:c.role, years:c.years, location:c.location})));
-      const prompts = {
-        vendor_research: { web: true, prompt: `You are a recruitment research agent. Find 5 Australia-based vendor/service companies likely hiring senior sales, BD, account executive, director, VP, or MD roles. For each: company name, industry, location, why they might be hiring. Be specific.` },
-        candidate_sourcing: { web: false, prompt: `You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, Account Executives, MDs at Australian vendor companies. Give a concrete LinkedIn sourcing strategy: exact filters, Boolean strings, signals a candidate is open to moving. My current candidates: ${candidateData}` },
-        outreach: { web: false, prompt: `You are an outreach copywriter for a recruiter. My candidates: ${candidateData}. My vendor roles: ${vendorData}. Draft a personalized message for each candidate about a relevant role. Under 120 words each, warm but direct. If no data, give 2 templates.` },
-        pipeline_intelligence: { web: false, prompt: `You are a pipeline analyst. My pipeline: ${JSON.stringify(pipeline.map(p=>({name:p.name,stage:p.stage,salary:p.salary})))}. Analyze conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), 3 actions this week. If empty, what to focus on first.` },
-        quality: { web: false, prompt: `You are a placement quality advisor. Give a practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags. Actionable.` },
-      };
-      const config = prompts[type];
-      try {
-        const text = await callClaude({ prompt: config.prompt, useWebSearch: config.web });
-        out.innerHTML = '<div class="agent-output">' + text.replace(/</g, '&lt;') + '</div>';
-      } catch (e) { out.innerHTML = '<div class="agent-output" style="border-left:3px solid #f87171; color:#fca5a5;">Error: ' + e.message + '</div>'; }
-    }
+Score each 0-100 overall + sub-scores: experience (depth+relevance), education (qualifications), achievements (measurable results), fit (location salary industry). Rank best to worst.
 
-    function render() {
-      document.getElementById('d-vendors').textContent = vendors.length;
-      document.getElementById('d-candidates').textContent = candidates.length;
-      document.getElementById('d-pipeline').textContent = pipeline.filter(p => p.stage !== 'placed').length;
-      document.getElementById('d-placed').textContent = pipeline.filter(p => p.stage === 'placed').length;
-
-      // populate match role dropdown
-      const sel = document.getElementById('match-role');
-      const current = sel.value;
-      sel.innerHTML = vendors.length === 0 ? '<option value="">No roles yet</option>' : vendors.map(v => `<option value="${v.id}">${v.name} — ${v.role || 'role n/a'}</option>`).join('');
-      if (current) sel.value = current;
-
-      document.getElementById('vendor-list').innerHTML = vendors.length === 0
-        ? '<div class="empty">No vendors yet. Upload a job description or add manually.</div>'
-        : vendors.map(v => `<div class="card"><div class="card-row"><div><div class="card-title">${v.name}</div><div class="card-meta">${v.industry||'Industry n/a'} · ${v.location||'Location n/a'}${v.role?' · Needs: '+v.role:''}</div></div><button class="btn btn-danger" onclick="deleteVendor(${v.id})">Remove</button></div></div>`).join('');
-
-      document.getElementById('candidate-list').innerHTML = candidates.length === 0
-        ? '<div class="empty">No candidates yet. Upload a CV or add manually.</div>'
-        : candidates.map(c => `<div class="card"><div class="card-row"><div><div class="card-title">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-skills">Skills: '+c.skills+'</div>':''}</div><button class="btn btn-danger" onclick="deleteCandidate(${c.id})">Remove</button></div></div>`).join('');
-
-      ['sourced','interview','offer','placed'].forEach(s => { document.getElementById('p-' + s).textContent = pipeline.filter(p => p.stage === s).length; });
-
-      document.getElementById('pipeline-list').innerHTML = pipeline.length === 0
-        ? '<div class="empty">No pipeline activity. Add candidates to start tracking.</div>'
-        : pipeline.map(p => {
-          const sal = parseFloat(p.salary);
-          const fee = (p.stage === 'placed' && sal) ? Math.round(sal * 1000 * 0.2) : null;
-          const potential = sal ? Math.round(sal * 1000 * 0.2) : null;
-          const badgeClass = p.stage === 'placed' ? 'green' : (p.stage === 'interview' || p.stage === 'offer') ? 'yellow' : '';
-          return `<div class="card"><div class="card-row"><div><div class="card-title">${p.name}</div><div class="card-meta">${fee ? 'Fee earned: $' + fee.toLocaleString() : (potential ? 'Potential fee: $' + potential.toLocaleString() : 'No salary set')}</div></div><div style="display:flex; gap:8px; align-items:center;"><span class="badge ${badgeClass}">${p.stage}</span><select class="stage-select" onchange="updateStage(${p.id}, this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select></div></div></div>`;
+Return ONLY JSON:
+{"matches":[{"id":0,"name":"","overall":0,"experience":0,"education":0,"achievements":0,"fit":0,"reason":"2 sentences on score","edge":"biggest advantage","risk":"main concern"}]}
+Order highest to lowest overall.`;
+    try{
+      const text=await callClaude({prompt});
+      const result=parseJSON(text);
+      const matches=(result.matches||[]).sort((a,b)=>b.overall-a.overall);
+      out.innerHTML=`<div style="font-family:'Space Mono',monospace; font-size:9px; letter-spacing:0.18em; color:var(--text-3); margin-bottom:16px;">RANKED FOR: ${role.name.toUpperCase()} — ${(role.role||'').toUpperCase()}</div>`+
+        matches.map(m=>{
+          const cls=m.overall>=80?'score-high':m.overall>=60?'score-mid':'score-low';
+          return `<div class="match-card">
+            <div class="match-head"><div class="match-name">${m.name}</div><div class="score-pill ${cls}">${m.overall}</div></div>
+            <div class="dim-grid">
+              <div class="dim"><div class="dim-label">EXPERIENCE</div><div class="dim-val">${m.experience}</div></div>
+              <div class="dim"><div class="dim-label">EDUCATION</div><div class="dim-val">${m.education}</div></div>
+              <div class="dim"><div class="dim-label">ACHIEVEMENTS</div><div class="dim-val">${m.achievements}</div></div>
+              <div class="dim"><div class="dim-label">FIT</div><div class="dim-val">${m.fit}</div></div>
+            </div>
+            <div class="match-reason">${m.reason}</div>
+            <div class="match-edge">▲ ${m.edge}</div>
+            <div class="match-risk">▼ ${m.risk}</div>
+          </div>`;
         }).join('');
+    }catch(e){out.innerHTML=`<div class="alert alert-error">Error: ${e.message}</div>`;}
+  }
+
+  async function generateShortlist(){
+    const out=document.getElementById('shortlist-output');
+    const cvFiles=[cv1Data,cv2Data,cv3Data].filter(Boolean);
+    if(!briefData&&!cvFiles.length){out.innerHTML='<div class="alert alert-error">Upload at least a position brief or one CV.</div>';return;}
+    out.innerHTML='<div class="output-box"><span class="spinner"></span>Generating Romaris Partners shortlist document...</div>';
+    const notes=document.getElementById('doc-notes').value;
+    const firstDoc=briefData||cvFiles[0];
+    const prompt=`You are creating a professional executive search shortlist document for Romaris Partners. Analyze all provided documents carefully.${notes?'\n\nRECRUITER NOTES: '+notes+'\n':''}
+
+Generate a complete professional HTML shortlist using this exact template:
+
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Space Grotesk',sans-serif;background:#f5f4f0;color:#1c1c1a;padding:0;}
+.header{background:#15233a;padding:48px 52px;margin-bottom:0;}
+.logo-mark{display:flex;flex-direction:column;gap:3px;margin-bottom:14px;}
+.logo-mark span{display:block;height:5px;border-radius:1px;}
+.logo-name{font-family:'Spectral',serif;font-weight:600;font-size:28px;letter-spacing:0.05em;color:#f3f1ea;}
+.logo-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.4em;color:#c2a14e;margin-top:5px;}
+.doc-title{font-family:'Spectral',serif;font-weight:300;font-size:20px;color:#f3f1ea;margin-top:28px;}
+.doc-meta{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#8e9ab0;margin-top:6px;}
+.body{padding:40px 52px;}
+.sec-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;color:#a39e91;margin-bottom:10px;}
+.role-box{background:#fff;border:1px solid #e4e1d8;border-radius:8px;padding:24px;margin-bottom:32px;}
+.role-title{font-family:'Spectral',serif;font-size:22px;color:#15233a;margin-bottom:6px;}
+.role-body{font-size:13px;color:#54514a;line-height:1.7;}
+.candidate{background:#fff;border:1px solid #e4e1d8;border-left:3px solid #c2a14e;border-radius:8px;padding:24px;margin-bottom:18px;}
+.cand-name{font-family:'Spectral',serif;font-size:20px;color:#15233a;margin-bottom:3px;}
+.cand-role{font-size:13px;color:#54514a;margin-bottom:14px;}
+.cand-sec{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.18em;color:#a39e91;margin:12px 0 5px;}
+.cand-body{font-size:13px;color:#54514a;line-height:1.7;}
+.score-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
+.score-box{background:#f5f4f0;border:1px solid #e4e1d8;border-radius:6px;padding:10px;text-align:center;}
+.score-lbl{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.1em;color:#a39e91;margin-bottom:3px;}
+.score-val{font-family:'Spectral',serif;font-size:20px;color:#15233a;}
+.verdict{background:#f5f4f0;border-radius:6px;padding:12px 14px;margin-top:12px;font-size:13px;color:#54514a;line-height:1.6;border-left:2px solid #c2a14e;}
+.footer{text-align:center;padding:28px;border-top:1px solid #e4e1d8;margin-top:16px;}
+.footer-name{font-family:'Spectral',serif;font-size:14px;color:#54514a;}
+.footer-contact{font-family:'Space Mono',monospace;font-size:9px;color:#a39e91;margin-top:4px;letter-spacing:0.1em;}
+</style></head><body>
+<div class="header">
+<div class="logo-mark">
+<span style="width:32px;background:#c2a14e;"></span>
+<span style="width:24px;background:#c2a14e;margin-left:8px;"></span>
+<span style="width:24px;background:#f3f1ea;margin-left:8px;opacity:0.3;"></span>
+<span style="width:16px;background:#f3f1ea;margin-left:16px;opacity:0.3;"></span>
+</div>
+<div class="logo-name">ROMARIS</div>
+<div class="logo-sub">PARTNERS</div>
+<div class="doc-title">Executive Search — Candidate Shortlist</div>
+<div class="doc-meta">PREPARED BY ANTONIO J. ROJAS · MANAGING PARTNER · ${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'}).toUpperCase()}</div>
+</div>
+<div class="body">
+[ROLE SECTION: sec-label "THE OPPORTUNITY", then role-box with role-title = role name, role-body = 3-4 sentence summary of the company, the role, key requirements, what they're looking for]
+
+[FOR EACH CANDIDATE: sec-label "CANDIDATE [N]", then candidate div with cand-name, cand-role = current role + company, cand-sec "PROFESSIONAL SUMMARY", cand-body = 3-4 sentence summary from CV, cand-sec "KEY ACHIEVEMENTS", cand-body = 3 bullet points of measurable achievements, score-row with 4 score-boxes for Experience/Education/Achievements/Fit each scored 0-100, verdict = 2-sentence fit assessment]
+</div>
+<div class="footer">
+<div class="footer-name">Romaris Partners · Executive &amp; Technical Search</div>
+<div class="footer-contact">ANTONIO@ROMARISPARTNERS.COM · +61 420 511 192 · LEVEL 5, 143 ST GEORGES TCE, PERTH WA 6000 · ROMARISPARTNERS.COM</div>
+</div>
+</body></html>
+
+Fill ALL bracketed sections with real content from the uploaded documents. Return ONLY the complete HTML.`;
+    try{
+      const text=await callClaude({prompt,document:firstDoc.base64,mediaType:firstDoc.mediaType});
+      out.innerHTML=`<div class="alert alert-success" style="margin-top:16px;">✓ Shortlist document generated.</div>
+        <div style="margin-bottom:10px; display:flex; gap:8px;">
+          <button class="btn btn-navy" onclick="document.getElementById('sl-frame').contentWindow.print()">Print / Save PDF</button>
+          <button class="btn" onclick="navigator.clipboard.writeText(window._slHTML)">Copy HTML</button>
+        </div>
+        <div style="background:#fff; border:1px solid var(--border); border-radius:var(--r); overflow:hidden;">
+          <iframe id="sl-frame" style="width:100%; height:680px; border:none;" srcdoc=""></iframe>
+        </div>`;
+      document.getElementById('sl-frame').srcdoc=text;
+      window._slHTML=text;
+    }catch(e){out.innerHTML=`<div class="alert alert-error">Error: ${e.message}</div>`;}
+  }
+
+  const signalPrompts={
+    job_ads:`Search for Perth, Western Australia SMALL TO MID-SIZE vendor companies (under 200 employees, NO large corporates, NO companies with in-house HR/recruitment teams) that have recently posted job ads for Business Development Manager, Account Manager, Account Executive, Sales Director, or VP Sales roles. Focus on: mining technology vendors, industrial software, engineering consulting, professional services, logistics tech, SaaS, equipment suppliers. EXCLUDE: BHP, Rio Tinto, Fortescue, Wesfarmers, large banks, government departments, companies over 500 staff, companies with dedicated Talent Acquisition teams. For each: company name, size estimate, role posted, why they need an external recruiter, suggested cold call opening line. Find 6-8 specific real companies.`,
+    funding:`Search for Perth or Western Australia SMALL TO MID-SIZE companies (under 200 employees, Series A or B stage, NOT large ASX200) that raised funding in the last 6 months. Mining technology, industrial software, SaaS, engineering tech, professional services. EXCLUDE large corporates. For each: company name, amount raised, what they do, headcount estimate, why they need a BD/sales hire NOW, suggested approach. Find 5-6 real examples.`,
+    contracts:`Search for recent contract wins by SMALL TO MID-SIZE WA companies (under 200 staff) winning WA government/mining contracts in the last 3 months. Technology vendors, engineering consultancies, mining services SMEs, software companies. EXCLUDE large construction firms and Tier 1 contractors. For each: company name, size, contract won, value if known, why they need commercial talent urgently, suggested approach. Find 5-6 real examples.`,
+    headcount:`Search for Perth or WA SMALL TO MID-SIZE vendor companies (20-200 employees) in technology, mining tech, industrial software, consulting showing headcount growth or multiple open roles. EXCLUDE large companies and those with dedicated TA/HR teams. For each: company name, size, growth signals, roles they likely need, why external recruiter makes sense, suggested approach. Find 5-6 specific companies.`,
+    departures:`Search for recent departures of senior BD Directors, Sales Directors, Account Directors, VP Sales from SMALL TO MID-SIZE Perth or WA vendor/technology/mining tech companies (under 200 staff). EXCLUDE large corporates. For each: company name, size, role vacated, urgency level, suggested opening line. Find 5-6 examples.`,
+    expansion:`Search for SMALL TO MID-SIZE companies (under 200 staff) from elsewhere in Australia or internationally that recently announced expansion into WA or Perth. EXCLUDE large multinationals. For each: company name, size, expansion announced, what they do, roles needed in Perth, suggested approach. Find 5-6 real examples.`,
+  };
+  const signalLabels={job_ads:'Job Ads Posted',funding:'Recent Funding',contracts:'New Contracts Won',headcount:'Growing Headcount',departures:'BD Leaders Left',expansion:'Market Expansion'};
+
+  async function runSignal(type){
+    const out=document.getElementById('signals-output');
+    out.innerHTML=`<div class="output-box"><span class="spinner"></span>Scanning the web for ${signalLabels[type]} signals in Perth...</div>`;
+    try{
+      const text=await callClaude({prompt:signalPrompts[type],useWebSearch:true});
+      out.innerHTML=`<div class="output-box"><span class="output-line-gold">${signalLabels[type].toUpperCase()} — PERTH/WA</span>${fmtOutput(text)}</div>`;
+      document.getElementById('signals-last-run').textContent='Last run: '+new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){out.innerHTML=`<div class="alert alert-error">Error: ${e.message}</div>`;}
+  }
+
+  async function runAllSignals(btn){
+    btn.disabled=true;btn.textContent='Running...';
+    const out=document.getElementById('signals-output');
+    const types=Object.keys(signalPrompts);
+    let all='';
+    for(let i=0;i<types.length;i++){
+      out.innerHTML=`<div class="output-box"><span class="spinner"></span>Running signal ${i+1} of 6: ${signalLabels[types[i]]}...</div>`;
+      try{
+        const text=await callClaude({prompt:signalPrompts[types[i]],useWebSearch:true});
+        all+=`<div style="margin-bottom:28px;"><span class="output-line-gold">${signalLabels[types[i]].toUpperCase()}</span>${fmtOutput(text)}</div>`;
+      }catch(e){all+=`<div style="color:var(--danger);font-size:12px;margin-bottom:20px;">${signalLabels[types[i]]}: Error</div>`;}
+    }
+    out.innerHTML=`<div class="output-box">${all}</div>`;
+    document.getElementById('signals-last-run').textContent='Last run: '+new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+    btn.disabled=false;btn.textContent='Run All Signals';
+  }
+
+  async function runAgent(type){
+    const out=document.getElementById('agent-output');
+    out.innerHTML='<div class="output-box"><span class="spinner"></span>Running agent...</div>';
+    const vd=JSON.stringify(vendors.map(v=>({name:v.name,role:v.role,location:v.location})));
+    const cd=JSON.stringify(candidates.map(c=>({name:c.name,role:c.role,years:c.years,location:c.location})));
+    const prompts={
+      vendor_research:{web:true,prompt:`Find 5 Perth/WA small-to-mid-size vendor companies (under 200 staff, no in-house recruiters) that need to hire senior BD, Account Managers, Directors or VPs. Industries: mining tech, industrial software, engineering consulting, professional services. For each: company name, industry, location, role needed, why they need help. Return JSON: {"vendors":[{"name":"","industry":"","location":"","role":"","reason":""}]}`},
+      candidate_sourcing:{web:false,prompt:`You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, MDs at Australian vendor companies. Give concrete LinkedIn sourcing strategy: exact filters, Boolean search strings, signals a candidate is open to moving, how to approach passive candidates. My current candidates: ${cd}`},
+      outreach:{web:false,prompt:`Draft personalized LinkedIn/email outreach for each candidate about a relevant role. Under 120 words each, warm but direct, clear CTA. My candidates: ${cd}. My vendor roles: ${vd}. If no data, give 2 strong templates.`},
+      pipeline_intelligence:{web:false,prompt:`Analyze my pipeline: ${JSON.stringify(pipeline.map(p=>({name:p.name,stage:p.stage,salary:p.salary})))}. Conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), 3 specific actions this week. If empty, what to focus on first.`},
+      quality:{web:false,prompt:`Practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags to avoid. Actionable and specific for an executive search firm.`},
+    };
+    const config=prompts[type];
+    try{
+      const text=await callClaude({prompt:config.prompt,useWebSearch:config.web});
+      if(type==='vendor_research'){
+        try{
+          const result=parseJSON(text);
+          if(result.vendors&&result.vendors.length){
+            for(let i=0;i<result.vendors.length;i++){
+              const v=result.vendors[i];
+              await sb.from('vendors').insert({id:Date.now()+i,name:v.name||'',industry:v.industry||'',location:v.location||'',role:v.role||'',full_jd:v.reason||''});
+            }
+            await loadAll();
+            out.innerHTML=`<div class="output-box"><span style="color:var(--success); font-weight:600;">✓ ${result.vendors.length} vendors auto-added to your database.</span><br><br>${fmtOutput(text)}</div>`;
+            return;
+          }
+        }catch(e){}
+      }
+      out.innerHTML=`<div class="output-box">${fmtOutput(text)}</div>`;
+    }catch(e){out.innerHTML=`<div class="alert alert-error">Error: ${e.message}</div>`;}
+  }
+
+  function fmtOutput(text){
+    return text
+      .replace(/</g,'&lt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/^#{1,3} (.+)$/gm,'<span class="output-line-gold">$1</span>')
+      .replace(/^[\-\*] (.+)$/gm,'<div class="output-bullet">$1</div>')
+      .replace(/\n\n/g,'<br><br>')
+      .replace(/\n/g,'<br>');
+  }
+
+  async function addVendor(){
+    const name=document.getElementById('v-name').value.trim();if(!name)return;
+    await sb.from('vendors').insert({id:Date.now(),name,industry:document.getElementById('v-industry').value.trim(),location:document.getElementById('v-location').value.trim(),role:document.getElementById('v-role').value.trim(),full_jd:''});
+    ['v-name','v-industry','v-location','v-role'].forEach(id=>document.getElementById(id).value='');
+    loadAll();
+  }
+
+  async function addCandidate(){
+    const name=document.getElementById('c-name').value.trim();if(!name)return;
+    const id=Date.now();
+    const cand={id,name,role:document.getElementById('c-role').value.trim(),years:document.getElementById('c-years').value.trim(),location:document.getElementById('c-location').value.trim(),salary:document.getElementById('c-salary').value.trim(),skills:'',full_profile:'',stage:'sourced'};
+    await sb.from('candidates').insert(cand);
+    await sb.from('pipeline').insert({id,name:cand.name,salary:cand.salary,stage:'sourced'});
+    ['c-name','c-role','c-years','c-location','c-salary'].forEach(id=>document.getElementById(id).value='');
+    loadAll();
+  }
+
+  async function deleteVendor(id){await sb.from('vendors').delete().eq('id',id);loadAll();}
+  async function deleteCandidate(id){await sb.from('candidates').delete().eq('id',id);await sb.from('pipeline').delete().eq('id',id);loadAll();}
+  async function updateStage(id,stage){await sb.from('pipeline').update({stage}).eq('id',id);await sb.from('candidates').update({stage}).eq('id',id);loadAll();}
+
+  function render(){
+    // Dashboard greeting + date
+    const hr=new Date().getHours();
+    const greet=hr<12?'Good morning, Antonio':hr<18?'Good afternoon, Antonio':'Good evening, Antonio';
+    const gEl=document.getElementById('greeting'); if(gEl) gEl.textContent=greet;
+    const dEl=document.getElementById('today-date'); if(dEl) dEl.textContent=new Date().toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'})+" · Here's where things stand";
+
+    document.getElementById('d-vendors').textContent=vendors.length;
+    document.getElementById('d-candidates').textContent=candidates.length;
+    document.getElementById('d-pipeline').textContent=pipeline.filter(p=>p.stage!=='placed').length;
+
+    // Fees from placed deals
+    const placedDeals=pipeline.filter(p=>p.stage==='placed');
+    const totalFees=placedDeals.reduce((sum,p)=>{const s=parseFloat(p.salary); return sum+(s?s*1000*0.2:0);},0);
+    document.getElementById('d-fees').textContent='$'+(totalFees>=1000?Math.round(totalFees/1000)+'k':Math.round(totalFees));
+    document.getElementById('d-placed-delta').textContent=placedDeals.length+' placement'+(placedDeals.length!==1?'s':'');
+
+    const offerCount=pipeline.filter(p=>p.stage==='offer').length;
+    document.getElementById('d-pipeline-delta').textContent=offerCount?offerCount+' at offer stage':'Active deals';
+    document.getElementById('d-vendors-delta').textContent=vendors.length?'Client companies':'None yet';
+    document.getElementById('d-candidates-delta').textContent=candidates.length?'In talent pool':'None yet';
+
+    // Priorities
+    const prio=document.getElementById('priorities-list');
+    if(prio){
+      let items=[];
+      const offers=pipeline.filter(p=>p.stage==='offer');
+      offers.forEach(p=>items.push({icon:'ti-mail',color:'var(--gold)',title:p.name+' at offer stage',sub:'Close the deal — follow up with client'}));
+      const interviews=pipeline.filter(p=>p.stage==='interview');
+      interviews.forEach(p=>items.push({icon:'ti-clock-hour-4',color:'var(--warning)',title:p.name+' in interview',sub:'Check progress with candidate and client'}));
+      if(vendors.length===0) items.push({icon:'ti-radar',color:'var(--info)',title:'Run Signals to find Perth clients',sub:'6 signal types · live web intelligence'});
+      if(candidates.length===0) items.push({icon:'ti-upload',color:'var(--info)',title:'Upload candidate CVs',sub:'AI builds full profiles automatically'});
+      if(candidates.length>0&&vendors.length>0) items.push({icon:'ti-target',color:'var(--success)',title:'Run Match Engine',sub:candidates.length+' candidates · '+vendors.length+' roles to score'});
+      if(items.length===0) items.push({icon:'ti-circle-check',color:'var(--success)',title:'All caught up',sub:'Run morning signals for fresh leads'});
+      prio.innerHTML=items.slice(0,4).map(it=>`<div class="task"><i class="ti ${it.icon}" style="color:${it.color};"></i><div><div class="task-title">${it.title}</div><div class="task-sub">${it.sub}</div></div></div>`).join('');
     }
 
-    loadAll();
-  </script>
+    // Pipeline bars
+    const bars=document.getElementById('pipeline-bars');
+    if(bars){
+      const stages=[{k:'sourced',l:'Sourced',c:'var(--info)'},{k:'interview',l:'Interview',c:'var(--warning)'},{k:'offer',l:'Offer',c:'var(--gold)'},{k:'placed',l:'Placed',c:'var(--success)'}];
+      const max=Math.max(1,...stages.map(s=>pipeline.filter(p=>p.stage===s.k).length));
+      bars.innerHTML=stages.map(s=>{
+        const n=pipeline.filter(p=>p.stage===s.k).length;
+        const pct=Math.round((n/max)*100);
+        return `<div class="pbar-row"><div class="pbar-head"><span class="l">${s.l}</span><span class="v">${n}</span></div><div class="pbar-track"><div class="pbar-fill" style="width:${pct}%; background:${s.c};"></div></div></div>`;
+      }).join('');
+    }
+
+    const sel=document.getElementById('match-role');
+    if(sel){
+      const cur=sel.value;
+      sel.innerHTML=vendors.length===0?'<option value="">No roles yet — add vendors first</option>':vendors.map(v=>`<option value="${v.id}">${v.name} — ${v.role||'role n/a'}</option>`).join('');
+      if(cur)sel.value=cur;
+    }
+
+    const vl=document.getElementById('vendor-list');
+    if(vl) vl.innerHTML=vendors.length===0
+      ?'<div class="empty">NO VENDORS YET · UPLOAD A JD OR ADD MANUALLY</div>'
+      :vendors.map(v=>`<div class="card"><div class="card-row"><div><div class="card-name">${v.name}</div><div class="card-meta">${v.industry||'Industry n/a'} · ${v.location||'Location n/a'}${v.role?' · '+v.role:''}</div></div><button class="btn btn-ghost" onclick="deleteVendor(${v.id})">Remove</button></div></div>`).join('');
+
+    const cl=document.getElementById('candidate-list');
+    if(cl) cl.innerHTML=candidates.length===0
+      ?'<div class="empty">NO CANDIDATES YET · UPLOAD CVS OR ADD MANUALLY</div>'
+      :candidates.map(c=>`<div class="card"><div class="card-row"><div><div class="card-name">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-tags">'+c.skills+'</div>':''}</div><div style="display:flex;gap:6px;align-items:center;">${c.cv_path?'<a href="'+c.cv_path+'" target="_blank" class="btn btn-ghost" style="color:var(--info);text-decoration:none;"><i class="ti ti-file-text"></i>CV</a>':''}<button class="btn btn-ghost" onclick="deleteCandidate(${c.id})">Remove</button></div></div></div>`).join('');
+
+    ['sourced','interview','offer','placed'].forEach(s=>{const el=document.getElementById('p-'+s); if(el) el.textContent=pipeline.filter(p=>p.stage===s).length;});
+
+    const pl=document.getElementById('pipeline-list');
+    if(pl) pl.innerHTML=pipeline.length===0
+      ?'<div class="empty">NO PIPELINE ACTIVITY · ADD CANDIDATES TO START TRACKING</div>'
+      :pipeline.map(p=>{
+        const sal=parseFloat(p.salary);
+        const fee=(p.stage==='placed'&&sal)?Math.round(sal*1000*0.2):null;
+        const potential=sal?Math.round(sal*1000*0.2):null;
+        const bc='badge-'+p.stage;
+        return `<div class="card"><div class="card-row"><div><div class="card-name">${p.name}</div><div class="card-meta" style="margin-top:3px;">${fee?'Fee earned: $'+fee.toLocaleString():(potential?'Potential fee: $'+potential.toLocaleString():'No salary set')}</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ${bc}">${p.stage.toUpperCase()}</span><select class="stage-sel" onchange="updateStage(${p.id},this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select></div></div></div>`;
+      }).join('');
+  }
+
+  loadAll();
+</script>
 </body>
 </html>
