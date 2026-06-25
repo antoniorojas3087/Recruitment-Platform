@@ -489,7 +489,6 @@ Unknown fields = empty string.`;
         }catch(e){}
         const cand={id,name:p.name||files[i].name,role:p.role||'',years:String(p.years||''),location:p.location||'',salary:String(p.salary||''),skills:p.skills||'',full_profile:p.full_profile||'',cv_path,stage:'sourced'};
         await sb.from('candidates').insert(cand);
-        await sb.from('pipeline').insert({id,name:cand.name,salary:cand.salary,stage:'sourced'});
         done++;
       }catch(e){failed++;}
     }
@@ -727,14 +726,24 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
   async function addCandidate(){
     const name=document.getElementById('c-name').value.trim();if(!name)return;
     const id=Date.now();
-    const cand={id,name,role:document.getElementById('c-role').value.trim(),years:document.getElementById('c-years').value.trim(),location:document.getElementById('c-location').value.trim(),salary:document.getElementById('c-salary').value.trim(),skills:'',full_profile:'',stage:'sourced'};
+    const cand={id,name,role:document.getElementById('c-role').value.trim(),years:document.getElementById('c-years').value.trim(),location:document.getElementById('c-location').value.trim(),salary:document.getElementById('c-salary').value.trim(),skills:'',full_profile:'',cv_path:'',stage:'sourced'};
     await sb.from('candidates').insert(cand);
-    await sb.from('pipeline').insert({id,name:cand.name,salary:cand.salary,stage:'sourced'});
     ['c-name','c-role','c-years','c-location','c-salary'].forEach(id=>document.getElementById(id).value='');
     loadAll();
   }
 
   async function deleteVendor(id){await sb.from('vendors').delete().eq('id',id);loadAll();}
+  async function addToPipeline(id){
+    const c=candidates.find(x=>x.id===id); if(!c) return;
+    const exists=pipeline.find(p=>p.id===id);
+    if(exists){ alert(c.name+' is already in the pipeline.'); return; }
+    await sb.from('pipeline').insert({id,name:c.name,salary:c.salary,stage:'sourced'});
+    loadAll();
+  }
+  async function removeFromPipeline(id){
+    await sb.from('pipeline').delete().eq('id',id);
+    loadAll();
+  }
   async function deleteCandidate(id){await sb.from('candidates').delete().eq('id',id);await sb.from('pipeline').delete().eq('id',id);loadAll();}
   async function updateStage(id,stage){await sb.from('pipeline').update({stage}).eq('id',id);await sb.from('candidates').update({stage}).eq('id',id);loadAll();}
 
@@ -802,7 +811,7 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
     const cl=document.getElementById('candidate-list');
     if(cl) cl.innerHTML=candidates.length===0
       ?'<div class="empty">NO CANDIDATES YET · UPLOAD CVS OR ADD MANUALLY</div>'
-      :candidates.map(c=>`<div class="card"><div class="card-row"><div><div class="card-name">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-tags">'+c.skills+'</div>':''}</div><div style="display:flex;gap:6px;align-items:center;">${c.cv_path?'<a href="'+c.cv_path+'" target="_blank" class="btn btn-ghost" style="color:var(--info);text-decoration:none;"><i class="ti ti-file-text"></i>CV</a>':''}<button class="btn btn-ghost" onclick="deleteCandidate(${c.id})">Remove</button></div></div></div>`).join('');
+      :candidates.map(c=>`<div class="card"><div class="card-row"><div><div class="card-name">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-tags">'+c.skills+'</div>':''}</div><div style="display:flex;gap:6px;align-items:center;">${c.cv_path?'<a href="'+c.cv_path+'" target="_blank" class="btn btn-ghost" style="color:var(--info);text-decoration:none;"><i class="ti ti-file-text"></i>CV</a>':''}<button class="btn btn-ghost" style="color:var(--gold-hover);" onclick="addToPipeline(${c.id})"><i class="ti ti-arrow-right"></i>Pipeline</button><button class="btn btn-ghost" onclick="deleteCandidate(${c.id})">Remove</button></div></div></div>`).join('');
 
     ['sourced','interview','offer','placed'].forEach(s=>{const el=document.getElementById('p-'+s); if(el) el.textContent=pipeline.filter(p=>p.stage===s).length;});
 
@@ -814,7 +823,7 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
         const fee=(p.stage==='placed'&&sal)?Math.round(sal*1000*0.2):null;
         const potential=sal?Math.round(sal*1000*0.2):null;
         const bc='badge-'+p.stage;
-        return `<div class="card"><div class="card-row"><div><div class="card-name">${p.name}</div><div class="card-meta" style="margin-top:3px;">${fee?'Fee earned: $'+fee.toLocaleString():(potential?'Potential fee: $'+potential.toLocaleString():'No salary set')}</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ${bc}">${p.stage.toUpperCase()}</span><select class="stage-sel" onchange="updateStage(${p.id},this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select></div></div></div>`;
+        return `<div class="card"><div class="card-row"><div><div class="card-name">${p.name}</div><div class="card-meta" style="margin-top:3px;">${fee?'Fee earned: $'+fee.toLocaleString():(potential?'Potential fee: $'+potential.toLocaleString():'No salary set')}</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ${bc}">${p.stage.toUpperCase()}</span><select class="stage-sel" onchange="updateStage(${p.id},this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select><button class="btn btn-ghost" onclick="removeFromPipeline(${p.id})"><i class="ti ti-x"></i></button></div></div></div>`;
       }).join('');
   }
 
