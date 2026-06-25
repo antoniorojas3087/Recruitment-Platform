@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Romaris Partners</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%2315233a'/%3E%3Crect x='7' y='8' width='18' height='3' rx='1' fill='%23c2a14e'/%3E%3Crect x='11' y='13' width='14' height='3' rx='1' fill='%23c2a14e'/%3E%3Crect x='11' y='18' width='14' height='3' rx='1' fill='%23e7e5de'/%3E%3Crect x='15' y='23' width='10' height='3' rx='1' fill='%23e7e5de'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -476,7 +477,7 @@ Unknown fields = empty string.`;
       status.innerHTML=`<div class="alert alert-info"><span class="spinner"></span>Processing CV ${i+1} of ${files.length}... (${done} added${failed?', '+failed+' failed':''})</div>`;
       try{
         const base64=await fileToBase64(files[i]);
-        const text=await callClaude({prompt,document:base64,mediaType:files[i].type});
+        const text=await callClaude({prompt,document:base64,mediaType:files[i].type,model:'claude-haiku-4-5-20251001'});
         const p=parseJSON(text);
         const id=Date.now()+i;
         // Upload original CV file to storage
@@ -506,7 +507,7 @@ Unknown fields = empty string.`;
       const prompt=`Analyze this job description in full. Return ONLY a JSON object:
 {"name":"hiring company name","industry":"","location":"city country","role":"role title","full_jd":"150-word summary: must-have experience years required skills education seniority responsibilities salary range ideal candidate profile."}
 Unknown = empty string.`;
-      const text=await callClaude({prompt,document:base64,mediaType:file.type});
+      const text=await callClaude({prompt,document:base64,mediaType:file.type,model:'claude-haiku-4-5-20251001'});
       const v=parseJSON(text);
       const row={id:Date.now(),name:v.name||'Unnamed',industry:v.industry||'',location:v.location||'',role:v.role||'',full_jd:v.full_jd||''};
       await sb.from('vendors').insert(row);
