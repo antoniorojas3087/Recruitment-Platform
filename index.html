@@ -401,6 +401,19 @@
 
   </main>
 </div>
+
+<div id="cv-modal" style="display:none; position:fixed; inset:0; background:rgba(21,35,58,0.5); z-index:100; padding:24px; overflow-y:auto;">
+  <div style="max-width:820px; margin:0 auto; background:var(--surface); border-radius:var(--r); overflow:hidden;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border);">
+      <span style="font-family:'Spectral',serif; font-size:16px; color:var(--text);">Branded Candidate Profile</span>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-navy" onclick="document.getElementById('cv-frame').contentWindow.print()"><i class="ti ti-printer"></i>Print / PDF</button>
+        <button class="btn" onclick="document.getElementById('cv-modal').style.display='none'"><i class="ti ti-x"></i>Close</button>
+      </div>
+    </div>
+    <div id="cv-modal-body" style="padding:0;"></div>
+  </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL='https://efintqfbpaquoojgudfg.supabase.co';
@@ -746,6 +759,81 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
     await sb.from('pipeline').delete().eq('id',id);
     loadAll();
   }
+
+  async function brandedCV(id){
+    const c=candidates.find(x=>x.id===id); if(!c) return;
+    const modal=document.getElementById('cv-modal');
+    const body=document.getElementById('cv-modal-body');
+    modal.style.display='block';
+    body.innerHTML='<div style="padding:40px; text-align:center; color:var(--text-3);"><span class="spinner"></span>Generating branded profile for '+c.name+'...</div>';
+
+    const profileData=`Name: ${c.name}. Current role: ${c.role}. Years experience: ${c.years}. Location: ${c.location}. Salary expectation: $${c.salary}k. Skills: ${c.skills}. Full profile: ${c.full_profile||'Limited data — expand professionally from the role and skills.'}`;
+
+    const prompt=`You are creating a branded candidate profile document for Romaris Partners executive search. Using the candidate data below, produce a polished, professional one-page candidate profile.
+
+CANDIDATE DATA: ${profileData}
+
+Return ONLY a complete HTML document using this exact template:
+
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Space Grotesk',sans-serif;background:#fff;color:#1c1c1a;}
+.header{background:#15233a;padding:36px 44px;}
+.lm{display:flex;flex-direction:column;gap:3px;margin-bottom:12px;}
+.lm span{display:block;height:5px;border-radius:1px;}
+.lname{font-family:'Spectral',serif;font-weight:600;font-size:24px;letter-spacing:0.05em;color:#f3f1ea;}
+.lsub{font-size:9px;letter-spacing:0.4em;color:#c2a14e;margin-top:5px;}
+.tag{font-size:9px;letter-spacing:0.18em;color:#8e9ab0;margin-top:20px;}
+.body{padding:36px 44px;}
+.cand-name{font-family:'Spectral',serif;font-size:28px;color:#15233a;margin-bottom:4px;}
+.cand-role{font-size:14px;color:#54514a;margin-bottom:6px;}
+.cand-meta{font-family:'Space Mono',monospace;font-size:11px;color:#a39e91;letter-spacing:0.05em;margin-bottom:24px;}
+.sec{font-size:9px;letter-spacing:0.2em;color:#a39e91;margin:24px 0 8px;border-top:1px solid #e4e1d8;padding-top:18px;}
+.sec:first-of-type{border-top:none;padding-top:0;}
+.body-text{font-size:13px;color:#54514a;line-height:1.75;}
+.ach{font-size:13px;color:#54514a;line-height:2;}
+.skills-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.skill{background:#f5f4f0;border:1px solid #e4e1d8;border-radius:4px;padding:5px 11px;font-size:11px;color:#15233a;}
+.footer{padding:24px 44px;border-top:1px solid #e4e1d8;text-align:center;margin-top:12px;}
+.fname{font-family:'Spectral',serif;font-size:13px;color:#54514a;}
+.fcontact{font-family:'Space Mono',monospace;font-size:9px;color:#a39e91;margin-top:4px;letter-spacing:0.08em;}
+.conf{font-family:'Space Mono',monospace;font-size:8px;color:#b3aea1;letter-spacing:0.15em;margin-top:10px;}
+</style></head><body>
+<div class="header">
+<div class="lm"><span style="width:32px;background:#c2a14e;"></span><span style="width:24px;background:#c2a14e;margin-left:8px;"></span><span style="width:24px;background:#e7e5de;margin-left:8px;"></span><span style="width:16px;background:#e7e5de;margin-left:16px;"></span></div>
+<div class="lname">ROMARIS</div><div class="lsub">PARTNERS</div>
+<div class="tag">CONFIDENTIAL CANDIDATE PROFILE · PREPARED BY ROMARIS PARTNERS</div>
+</div>
+<div class="body">
+<div class="cand-name">${c.name}</div>
+[cand-role div: current role and company]
+[cand-meta div: years experience · location · salary expectation]
+<div class="sec">PROFESSIONAL SUMMARY</div>
+[body-text div: 4-5 sentence professional summary covering career trajectory, expertise, and what makes them strong]
+<div class="sec">KEY ACHIEVEMENTS</div>
+[ach div: 4-5 bullet points (use • character) of specific achievements with numbers where available]
+<div class="sec">CORE EXPERTISE</div>
+[skills-row div containing individual skill spans]
+</div>
+<div class="footer">
+<div class="fname">Romaris Partners · Executive &amp; Technical Search</div>
+<div class="fcontact">ANTONIO@ROMARISPARTNERS.COM · +61 420 511 192 · LEVEL 5, 143 ST GEORGES TCE, PERTH WA 6000</div>
+<div class="conf">CONFIDENTIAL · NOT FOR DISTRIBUTION WITHOUT ROMARIS PARTNERS CONSENT</div>
+</div>
+</body></html>
+
+Fill all [bracketed] sections with real professional content. Return ONLY the complete HTML.`;
+
+    try{
+      const text=await callClaude({prompt});
+      body.innerHTML='<iframe id="cv-frame" style="width:100%; height:75vh; border:none;" srcdoc=""></iframe>';
+      document.getElementById('cv-frame').srcdoc=text;
+    }catch(e){
+      body.innerHTML='<div class="alert alert-error" style="margin:20px;">Error: '+e.message+'</div>';
+    }
+  }
   async function deleteCandidate(id){await sb.from('candidates').delete().eq('id',id);await sb.from('pipeline').delete().eq('id',id);loadAll();}
   async function updateStage(id,stage){await sb.from('pipeline').update({stage}).eq('id',id);await sb.from('candidates').update({stage}).eq('id',id);loadAll();}
 
@@ -813,7 +901,7 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
     const cl=document.getElementById('candidate-list');
     if(cl) cl.innerHTML=candidates.length===0
       ?'<div class="empty">NO CANDIDATES YET · UPLOAD CVS OR ADD MANUALLY</div>'
-      :candidates.map(c=>`<div class="card"><div class="card-row"><div><div class="card-name">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-tags">'+c.skills+'</div>':''}</div><div style="display:flex;gap:6px;align-items:center;">${c.cv_path?'<a href="'+c.cv_path+'" target="_blank" class="btn btn-ghost" style="color:var(--info);text-decoration:none;"><i class="ti ti-file-text"></i>CV</a>':''}<button class="btn btn-ghost" style="color:var(--gold-hover);" onclick="addToPipeline(${c.id})"><i class="ti ti-arrow-right"></i>Pipeline</button><button class="btn btn-ghost" onclick="deleteCandidate(${c.id})">Remove</button></div></div></div>`).join('');
+      :candidates.map(c=>`<div class="card"><div class="card-row"><div><div class="card-name">${c.name}</div><div class="card-meta">${c.role||'Role n/a'} · ${c.years||'?'} yrs · ${c.location||'Location n/a'}${c.salary?' · $'+c.salary+'k':''}</div>${c.skills?'<div class="card-tags">'+c.skills+'</div>':''}</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">${c.cv_path?'<a href="'+c.cv_path+'" target="_blank" class="btn btn-ghost" style="color:var(--info);text-decoration:none;"><i class="ti ti-file-text"></i>CV</a>':''}<button class="btn btn-ghost" style="color:var(--navy);" onclick="brandedCV(${c.id})"><i class="ti ti-id-badge-2"></i>Branded CV</button><button class="btn btn-ghost" style="color:var(--gold-hover);" onclick="addToPipeline(${c.id})"><i class="ti ti-arrow-right"></i>Pipeline</button><button class="btn btn-ghost" onclick="deleteCandidate(${c.id})">Remove</button></div></div></div>`).join('');
 
     ['sourced','interview','offer','placed'].forEach(s=>{const el=document.getElementById('p-'+s); if(el) el.textContent=pipeline.filter(p=>p.stage===s).length;});
 
