@@ -346,7 +346,7 @@
         <div class="stat-card"><div class="stat-top"><span class="stat-label">OFFER</span><i class="ti ti-mail"></i></div><div class="stat-num" id="p-offer">0</div></div>
         <div class="stat-card dark"><div class="stat-top"><span class="stat-label">PLACED</span><i class="ti ti-trophy"></i></div><div class="stat-num" id="p-placed">0</div></div>
       </div>
-      <div class="alert alert-info">Move candidates through stages. Placed deals auto-calculate your 20% fee.</div>
+      <div class="alert alert-info">Move candidates through stages. Set each deal's fee rate (12 to 20%). Placed deals auto-calculate the fee.</div>
       <div id="pipeline-list"></div>
     </div>
 
@@ -729,7 +729,7 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
       vendor_research:{web:true,prompt:`Find 5 Perth/WA small-to-mid-size vendor companies (under 200 staff, no in-house recruiters) that need to hire senior BD, Account Managers, Directors or VPs. Industries: mining tech, industrial software, engineering consulting, professional services. For each: company name, industry, location, role needed, why they need help. Return JSON: {"vendors":[{"name":"","industry":"","location":"","role":"","reason":""}]}`},
       candidate_sourcing:{web:false,prompt:`You are a candidate sourcing strategist. I place senior BD, Account Managers, Directors, VPs, MDs at Australian vendor companies. Give concrete LinkedIn sourcing strategy: exact filters, Boolean search strings, signals a candidate is open to moving, how to approach passive candidates. My current candidates: ${cd}`},
       outreach:{web:false,prompt:`Draft personalized LinkedIn/email outreach for each candidate about a relevant role. Under 120 words each, warm but direct, clear CTA. My candidates: ${cd}. My vendor roles: ${vd}. If no data, give 2 strong templates.`},
-      pipeline_intelligence:{web:false,prompt:`Analyze my pipeline: ${JSON.stringify(pipeline.map(p=>({name:p.name,stage:p.stage,salary:p.salary})))}. Conversion health, bottlenecks, stalled candidates, total potential fees (20% of salary), 3 specific actions this week. If empty, what to focus on first.`},
+      pipeline_intelligence:{web:false,prompt:`Analyze my pipeline: ${JSON.stringify(pipeline.map(p=>({name:p.name,stage:p.stage,salary:p.salary,fee_pct:p.fee_pct||20})))}. Conversion health, bottlenecks, stalled candidates, total potential fees (each deal's fee_pct percent of salary), 3 specific actions this week. If empty, what to focus on first.`},
       quality:{web:false,prompt:`Practical framework for placement quality and 6-month retention: what to check before placing, how to set expectations, red flags to avoid. Actionable and specific for an executive search firm.`},
     };
     const config=prompts[type];
@@ -784,11 +784,15 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
     const c=candidates.find(x=>x.id===id); if(!c) return;
     const exists=pipeline.find(p=>p.id===id);
     if(exists){ alert(c.name+' is already in the pipeline.'); return; }
-    await sb.from('pipeline').insert({id,name:c.name,salary:c.salary,stage:'sourced'});
+    await sb.from('pipeline').insert({id,name:c.name,salary:c.salary,stage:'sourced',fee_pct:20});
     loadAll();
   }
   async function removeFromPipeline(id){
     await sb.from('pipeline').delete().eq('id',id);
+    loadAll();
+  }
+  async function updateFee(id,pct){
+    await sb.from('pipeline').update({fee_pct:parseInt(pct)}).eq('id',id);
     loadAll();
   }
 
@@ -891,7 +895,7 @@ Fill all [bracketed] sections with real professional content. Return ONLY the co
 
     // Fees from placed deals
     const placedDeals=pipeline.filter(p=>p.stage==='placed');
-    const totalFees=placedDeals.reduce((sum,p)=>{const s=parseFloat(p.salary); return sum+(s?s*1000*0.2:0);},0);
+    const totalFees=placedDeals.reduce((sum,p)=>{const s=parseFloat(p.salary); const pct=(p.fee_pct||20)/100; return sum+(s?s*1000*pct:0);},0);
     document.getElementById('d-fees').textContent='$'+(totalFees>=1000?Math.round(totalFees/1000)+'k':Math.round(totalFees));
     document.getElementById('d-placed-delta').textContent=placedDeals.length+' placement'+(placedDeals.length!==1?'s':'');
 
@@ -951,10 +955,11 @@ Fill all [bracketed] sections with real professional content. Return ONLY the co
       ?'<div class="empty">NO PIPELINE ACTIVITY · ADD CANDIDATES TO START TRACKING</div>'
       :pipeline.map(p=>{
         const sal=parseFloat(p.salary);
-        const fee=(p.stage==='placed'&&sal)?Math.round(sal*1000*0.2):null;
-        const potential=sal?Math.round(sal*1000*0.2):null;
+        const pct=(p.fee_pct||20);
+        const fee=(p.stage==='placed'&&sal)?Math.round(sal*1000*pct/100):null;
+        const potential=sal?Math.round(sal*1000*pct/100):null;
         const bc='badge-'+p.stage;
-        return `<div class="card"><div class="card-row"><div><div class="card-name">${p.name}</div><div class="card-meta" style="margin-top:3px;">${fee?'Fee earned: $'+fee.toLocaleString():(potential?'Potential fee: $'+potential.toLocaleString():'No salary set')}</div></div><div style="display:flex;gap:8px;align-items:center;"><span class="badge ${bc}">${p.stage.toUpperCase()}</span><select class="stage-sel" onchange="updateStage(${p.id},this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select><button class="btn btn-ghost" onclick="removeFromPipeline(${p.id})"><i class="ti ti-x"></i></button></div></div></div>`;
+        return `<div class="card"><div class="card-row"><div><div class="card-name">${p.name}</div><div class="card-meta" style="margin-top:3px;">${fee?'Fee earned: $'+fee.toLocaleString():(potential?'Potential fee: $'+potential.toLocaleString():'No salary set')} <span style="color:var(--text-4);">at ${pct}%</span></div></div><div style="display:flex;gap:8px;align-items:center;"><select class="stage-sel" style="min-width:70px;" onchange="updateFee(${p.id},this.value)" title="Fee %"><option value="12" ${pct==12?'selected':''}>12%</option><option value="15" ${pct==15?'selected':''}>15%</option><option value="18" ${pct==18?'selected':''}>18%</option><option value="20" ${pct==20?'selected':''}>20%</option></select><span class="badge ${bc}">${p.stage.toUpperCase()}</span><select class="stage-sel" onchange="updateStage(${p.id},this.value)"><option value="sourced" ${p.stage==='sourced'?'selected':''}>Sourced</option><option value="interview" ${p.stage==='interview'?'selected':''}>Interview</option><option value="offer" ${p.stage==='offer'?'selected':''}>Offer</option><option value="placed" ${p.stage==='placed'?'selected':''}>Placed</option></select><button class="btn btn-ghost" onclick="removeFromPipeline(${p.id})"><i class="ti ti-x"></i></button></div></div></div>`;
       }).join('');
   }
 
