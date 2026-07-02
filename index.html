@@ -26,6 +26,7 @@
       --sidebar-w:210px; --r:14px; --r-sm:10px;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
+    @page { margin: 12mm; }
     html { color-scheme:light; }
     body { font-family:'Space Grotesk',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; font-size:14px; -webkit-font-smoothing:antialiased; }
     .layout { display:flex; min-height:100vh; }
@@ -500,7 +501,7 @@
     const files=Array.from(input.files);if(!files.length)return;
     const status=document.getElementById('cv-status');
     const prompt=`Analyze this CV/resume in full. Return ONLY a JSON object, no other text:
-{"name":"","role":"current job title","years":"total years experience number only","location":"city country","salary":"expected salary thousands number only","skills":"top 6 skills comma separated","full_profile":"150-word professional summary: career trajectory key achievements with numbers education qualifications industry depth standout strengths. Specific and factual."}
+{"name":"","role":"current job title","years":"total years experience number only","location":"city country","salary":"expected salary thousands number only","skills":"top 6 skills comma separated","education":"list every formal qualification stated on the CV (degrees, diplomas, certifications, licences), separated by semicolons, exactly as written, do not invent any","full_profile":"150-word professional summary: career trajectory key achievements with numbers education qualifications industry depth standout strengths. Specific and factual."}
 Unknown fields = empty string.`;
     let done=0,failed=0;
     for(let i=0;i<files.length;i++){
@@ -518,7 +519,7 @@ Unknown fields = empty string.`;
           const up=await sb.storage.from('cvs').upload(path,files[i],{contentType:files[i].type,upsert:true});
           if(!up.error){ cv_path=sb.storage.from('cvs').getPublicUrl(path).data.publicUrl; }
         }catch(e){}
-        const cand={id,name:p.name||files[i].name,role:p.role||'',years:String(p.years||''),location:p.location||'',salary:String(p.salary||''),skills:p.skills||'',full_profile:p.full_profile||'',cv_path,stage:'sourced'};
+        const cand={id,name:p.name||files[i].name,role:p.role||'',years:String(p.years||''),location:p.location||'',salary:String(p.salary||''),skills:p.skills||'',education:p.education||'',full_profile:p.full_profile||'',cv_path,stage:'sourced'};
         const ins=await sb.from('candidates').insert(cand);
         if(ins.error){ throw new Error(ins.error.message); }
         done++;
@@ -658,7 +659,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#f5f4f0;color:#1c1c1a;pad
 <div class="body">
 [ROLE SECTION: sec-label "THE OPPORTUNITY", then role-box with role-title = role name, role-body = 3-4 sentence summary of the company, the role, key requirements, what they're looking for]
 
-[FOR EACH CANDIDATE: sec-label "CANDIDATE [N]", then candidate div with cand-name, cand-role = current role and company, cand-sec "PROFESSIONAL SUMMARY", cand-body = 3-4 sentence summary from CV, cand-sec "KEY ACHIEVEMENTS", cand-body = 3 bullet points (bullet character) of measurable achievements, cand-sec "EDUCATION", cand-body = ONLY formal education and professional qualifications explicitly stated in the CV (degrees, diplomas, certifications, licences), never work experience or military service, never invented, write "Not specified on CV" if none stated, score-row with 4 score-boxes for Experience/Education/Achievements/Fit each scored 0-100, verdict = 2-3 sentence fit assessment that includes the candidate's salary expectation and availability from the recruiter notes]
+[FOR EACH CANDIDATE: sec-label "CANDIDATE [N]", then candidate div with cand-name, cand-role = current role and company, cand-sec "PROFESSIONAL SUMMARY", cand-body = 3-4 sentence summary from CV, cand-sec "KEY ACHIEVEMENTS", cand-body = 3 bullet points (bullet character) of measurable achievements, cand-sec "EDUCATION", cand-body = list EVERY formal education and professional qualification explicitly stated in the CV, not only the highest one (degrees, diplomas, certifications, licences), never work experience or military service, never invented, write "Not specified on CV" if none stated, score-row with 4 score-boxes for Experience/Education/Achievements/Fit each scored 0-100, verdict = 2-3 sentence fit assessment that includes the candidate's salary expectation and availability from the recruiter notes]
 </div>
 <div class="footer">
 <div class="footer-name">Romaris Partners, Executive and Technical Search</div>
@@ -798,7 +799,7 @@ Fill ALL bracketed sections with real content from the uploaded documents. Retur
     modal.style.display='block';
     body.innerHTML='<div style="padding:40px; text-align:center; color:var(--text-3);"><span class="spinner"></span>Generating branded profile for '+c.name+'...</div>';
 
-    const profileData=`Name: ${c.name}. Current role: ${c.role}. Years experience: ${c.years}. Location: ${c.location}. Salary expectation: $${c.salary}k. Skills: ${c.skills}. Full profile: ${c.full_profile||'Limited data — expand professionally from the role and skills.'}`;
+    const profileData=`Name: ${c.name}. Current role: ${c.role}. Years experience: ${c.years}. Location: ${c.location}. Salary expectation: $${c.salary}k. Skills: ${c.skills}. Formal education and qualifications (list all of these): ${c.education||'not captured'}. Full profile: ${c.full_profile||'Limited data, expand professionally from the role and skills.'}`;
 
     const prompt=`You are creating a branded candidate profile document for Romaris Partners executive search. Using the candidate data below, produce a polished, professional one-page candidate profile.
 
@@ -853,7 +854,7 @@ body{font-family:'Space Grotesk',sans-serif;background:#fff;color:#1c1c1a;}
 <div class="sec">KEY ACHIEVEMENTS</div>
 [ach div: 4-5 bullet points (use the bullet character) of specific achievements with numbers where available]
 <div class="sec">EDUCATION &amp; QUALIFICATIONS</div>
-[body-text div: ONLY formal education and professional qualifications explicitly stated in the CV, such as university degrees, diplomas, certifications, and licences. Do NOT include work experience, military service, deployments, or job history here, those belong in the summary. Do NOT invent or infer any qualification. If the CV states no formal qualifications, write exactly "Not specified on CV."]
+[body-text div: List EVERY formal education and professional qualification explicitly stated in the CV, not only the highest one. Include all university degrees, diplomas, certifications, and licences, each on its own line. Do NOT include work experience, military service, deployments, or job history here, those belong in the summary. Do NOT invent or infer any qualification. If the CV states no formal qualifications, write exactly "Not specified on CV."]
 <div class="sec">CORE EXPERTISE</div>
 [skills-row div containing individual skill spans]
 </div>
